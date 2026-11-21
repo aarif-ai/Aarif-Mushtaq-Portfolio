@@ -7,7 +7,11 @@
 {% set nav_links = site.nav | selectattr("id", "in", nav_sections) | list %}
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/">{{ site.person.name }}</a>
+    <a class="brand" href="/">
+      {# alt="": the name right next to it already says who it is #}
+      <img class="brand-avatar" src="{{ site.person.avatar }}" alt="" width="32" height="32">
+      {{ site.person.name }}
+    </a>
 
     {% if nav_links %}
     {# Shown only below 48rem, and only once menu.js has set things up. #}

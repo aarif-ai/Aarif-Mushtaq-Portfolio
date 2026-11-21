@@ -1,0 +1,9 @@
+# Keep text files with Unix line endings (LF) everywhere, as Netlify builds
+# them; Windows checkouts would otherwise add a byte per line and skew the
+# size budget that build.py reports.
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff2 binary

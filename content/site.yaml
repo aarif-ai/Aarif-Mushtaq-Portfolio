@@ -10,6 +10,7 @@ person:
   email: "aarifmushtaq542@gmail.com"
   photo: "/img/aarif.webp"          # 440x440 square, ~37 KB
   photo_alt: "Aarif Mushtaq"
+  avatar: "/img/aarif-64.webp"      # header photo, made by scripts/make_icons.py
 
 # Interface labels.
 ui:
@@ -83,7 +84,7 @@ timeline:
     what: "Started B.Tech in AI & Data Science at the University of Kashmir, North Campus."
   - when: "2026 · Semester 2"
     what: "Built the Hostel Management System in Flask and SQLite."
-  - when: "2026"
+  - when: "2026 · Semester 3"
     what: "Began faculty-supervised research on open-weight LLM agent teams."
   - when: "Sep 2026"
     what: "Founded the VERITAS Language Club; ran 2 events with 100+ participants each."

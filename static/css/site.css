@@ -1,8 +1,4 @@
-/* =====================================================================
-   Aarif Mushtaq — portfolio stylesheet
-   1. Fonts   2. Tokens (dark default)   3. Light theme   4. Base
-   5. Layout & utilities   6. Header   7. Theme toggle   8. Motion
-   ===================================================================== */
+/* Aarif Mushtaq — portfolio stylesheet. Sections are numbered below. */
 
 /* ---------- 1. Fonts (self-hosted, Latin subset) ---------- */
 @font-face {
@@ -75,9 +71,8 @@
 }
 
 /* ---------- 3. Light theme ----------
-   Used when the visitor chose light (data-theme="light"), or when their
-   system prefers light and they haven't chosen dark. Same block twice
-   because plain CSS can't share it. */
+   When chosen (data-theme="light"), or when the system prefers light and
+   dark wasn't chosen. Plain CSS can't share the block, hence twice. */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
@@ -279,6 +274,9 @@ main:focus {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   margin-right: auto;
   color: var(--text);
   font-weight: 650;
@@ -286,9 +284,16 @@ main:focus {
   text-decoration: none;
 }
 
-/* Below 60rem the links sit on their own row and wrap (never a sideways
-   scroll). Below 48rem, menu.js turns them into a "Menu" panel; without JS
-   they simply stay visible and wrapped. */
+/* 32px round photo with a 1px teal ring */
+.brand-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* Below 60rem links wrap onto their own row (never a sideways scroll).
+   Below 48rem menu.js makes them a "Menu" panel; without JS they stay. */
 .site-nav {
   order: 3;
   width: 100%;
@@ -342,7 +347,7 @@ main:focus {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  min-height: 2.5rem;
+  height: 2.25rem;
   padding: 0 0.75rem;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
@@ -359,9 +364,20 @@ main:focus {
 }
 
 @media (max-width: 47.99rem) {
+  /* Phone bar: 56px, items centred with equal space above and below;
+     Menu sits right next to the theme toggle */
+  .header-inner {
+    column-gap: var(--space-1);
+    padding-block: 0.5rem;
+  }
+
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
   .has-menu .menu-toggle {
     display: inline-flex;
-    margin-right: var(--space-1);
   }
 
   .has-menu .site-nav {
@@ -470,7 +486,7 @@ main:focus {
   opacity: 1;
 }
 
-/* Portrait first at every width, left-aligned with the text */
+/* Portrait above the text (phones, tablets); beside it from 64rem */
 .hero-photo {
   display: block;
   width: 180px;
@@ -531,6 +547,26 @@ main:focus {
   .hero-photo {
     width: 260px;
     margin-bottom: var(--space-6);
+  }
+}
+
+/* Desktop: text on the left, larger photo on the right, centred vertically */
+@media (min-width: 64rem) {
+  .hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--space-8);
+  }
+
+  .hero-photo {
+    grid-area: 1 / 2;
+    width: 280px;
+    margin: 0 var(--space-3) 0 0;      /* room for the glow */
+  }
+
+  .hero-text {
+    grid-area: 1 / 1;
   }
 }
 
@@ -727,8 +763,7 @@ main:focus {
   margin-top: 0.4rem;
 }
 
-/* "Show full details" / "Hide details": a native <details>, styled as a
-   button. The label swaps with the open state; works without JS. */
+/* "Show full details": a native <details> styled as a button; no JS */
 .more {
   margin-top: var(--space-3);
 }
@@ -838,8 +873,7 @@ main:focus {
   margin-top: var(--space-2);
 }
 
-/* The title link stretches over the whole card, so any click on the card
-   opens the case study. Real links inside the card sit above it. */
+/* The title link covers the whole card; the card's own links sit above it */
 .card-link {
   color: inherit;
   text-decoration: none;
@@ -863,8 +897,7 @@ main:focus {
   z-index: 2;
 }
 
-/* Glow: a radial highlight drawn behind the card's content.
-   card-glow.js sets --glow-x/--glow-y; it shows only on hover with a mouse. */
+/* Glow: drawn behind the content at --glow-x/y (set by card-glow.js), mouse only */
 .card-glow {
   isolation: isolate;
 }
@@ -1176,6 +1209,7 @@ main:focus {
 .site-footer a {
   display: inline-flex;
   align-items: center;
+  gap: 0.35em;                       /* flex drops spaces: keeps "top ↑" apart */
   min-height: 2.75rem;               /* 44px tap target */
   color: var(--muted);
   text-decoration: none;
@@ -1351,8 +1385,7 @@ main:focus {
 }
 
 /* ---------- 20c. Diagrams (inline SVG, theme-aware) ---------- */
-/* Diagrams are drawn ~300 units wide; capping the width keeps their
-   15-unit labels between ~14px (phones) and ~18px (desktop). */
+/* ~300-unit-wide diagrams: labels stay ~14–18px */
 .diagram {
   max-width: 22rem;
   margin: var(--space-4) auto 0;
@@ -1482,15 +1515,13 @@ main:focus {
 .paper-contact li + li::before {
   content: "\00b7";
   margin-inline: 0.6em;
-  color: var(--muted);
 }
 
 .paper-contact li {
   overflow-wrap: anywhere;
 }
 
-/* Phones: one item per line, no separators (a wrapped "·" would dangle).
-   `screen` only: the A4 print page is also narrow but keeps one row. */
+/* Phones: one item per line, no separators (`screen`: print keeps one row) */
 @media screen and (max-width: 47.99rem) {
   .paper-contact {
     flex-direction: column;
@@ -1535,13 +1566,19 @@ main:focus {
   margin-top: var(--space-2);
 }
 
-/* Title on the left, date on the right (wraps below on narrow screens) */
+/* Title left, date right in its own column; phones: date wraps below */
 .r-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 0 var(--space-2);
+}
+
+@media screen and (max-width: 47.99rem) {
+  .r-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .r-title {
@@ -1611,8 +1648,7 @@ main:focus {
   text-align: right;
 }
 
-/* Reading progress bar: hidden unless the browser supports scroll timelines
-   and the visitor allows motion (see §21). */
+/* Progress bar: only with scroll-timeline support and motion allowed (§21) */
 .reading-progress {
   display: none;
 }
@@ -1648,10 +1684,8 @@ main:focus {
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* Scroll reveal: each block fades and rises in as it enters the
-       screen, finishing 160px after its top edge appears. Blocks already
-       on screen are simply visible. The `animation-timeline` line must come
-       after `animation`, which would otherwise reset it. */
+    /* Scroll reveal (§4.2): blocks fade and rise in over the first 160px
+       after they appear. `animation-timeline` must follow `animation`. */
     .section-title,
     .card,
     .reveal {
@@ -1660,11 +1694,9 @@ main:focus {
       animation-range: entry 0% entry 160px;
     }
 
-    /* Diagram draw-in (CLAUDE.md §4 item 7): each stroke has
-       pathLength="1", so a dash of length 1 offset by 1 hides it, and
-       moving the offset to 0 draws it. Each shape follows its own view
-       timeline, so the diagram draws top to bottom as you scroll.
-       Labels and the dashed "not run yet" parts fade in instead. */
+    /* Diagram draw-in (§4.7): strokes have pathLength="1", so moving the
+       dash offset 1 → 0 draws them; each shape follows its own view timeline.
+       Labels and dashed "not run yet" parts fade in instead. */
     .diagram .d-draw {
       stroke-dasharray: 1;
       animation: draw linear both;
@@ -1695,10 +1727,8 @@ main:focus {
   }
 }
 
-/* Cross-document view transitions (CLAUDE.md §4 item 6). Page links
-   cross-fade; the project title morphs between card and case study (names
-   come from css/view-transitions.css, generated by build.py). The header
-   gets its own name so it stays still instead of fading. */
+/* View transitions (§4.6): pages cross-fade; project titles morph
+   (names in css/view-transitions.css). The header stays still. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
@@ -1721,8 +1751,7 @@ main:focus {
     transition: opacity 300ms var(--ease-out);
   }
 
-  /* Gentle lift. `translate` (not `transform`) so it doesn't fight the
-     scroll-reveal animation, which uses `transform`. */
+  /* Lift via `translate`, so it doesn't fight the reveal's `transform` */
   .card {
     transition: translate 200ms var(--ease-out);
   }
@@ -1757,8 +1786,7 @@ main:focus {
     transition: transform 150ms var(--ease-out);
   }
 
-  /* Details open: content fades and drops in; the chevron turns.
-     (Closing is instant: CSS can't animate an element that is removed.) */
+  /* Details: content fades in on open (closing is instant); chevron turns */
   .more[open] > .more-body {
     animation: more-in 300ms var(--ease-out);
   }
@@ -1767,8 +1795,7 @@ main:focus {
     transition: transform 200ms var(--ease-out);
   }
 
-  /* Smooth colour change, only for the moment the theme is switched
-     (theme-toggle.js adds this class briefly), never on page load. */
+  /* Colour fade only while theme-toggle.js switches the theme */
   .theme-changing,
   .theme-changing *,
   .theme-changing *::before,
@@ -1782,10 +1809,9 @@ main:focus {
   }
 }
 
-/* ---------- 22. Print (used by resume.html "Save as PDF") ----------
-   A4, black on white, only the resume sheet. Links keep working in the
-   saved PDF but look like plain text. Placed last so it beats both themes
-   (:root[data-theme] has the same specificity as the theme rules). */
+/* ---------- 22. Print ----------
+   A4, black on white, page content only; links look like plain text.
+   Last in the file so it beats both themes. */
 @media print {
   @page {
     size: A4;
@@ -1817,8 +1843,7 @@ main:focus {
   .site-header,
   .site-footer,
   .resume-actions,
-  .hero-canvas,
-  .theme-toggle {
+  .hero-canvas {
     display: none !important;
   }
 

@@ -1,3 +1,4 @@
 # Tools for maintenance scripts only (not needed by Netlify).
 -r requirements.txt
 pymupdf==1.25.1
+pillow==11.0.0

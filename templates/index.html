@@ -17,8 +17,8 @@
   {# Decorative background: drifting nodes joined by faint lines. #}
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
 
-  <div class="container">
-    {# Portrait first at every width, then eyebrow and name. #}
+  <div class="container hero-inner">
+    {# Phones/tablets: portrait on top. From 64rem: text left, portrait right (CSS grid). #}
     <img class="hero-photo" src="{{ site.person.photo }}" alt="{{ site.person.photo_alt }}"
          width="440" height="440" fetchpriority="high" decoding="async">
     <div class="hero-text">
