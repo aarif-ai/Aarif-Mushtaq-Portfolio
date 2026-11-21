@@ -4,11 +4,11 @@
   - `photos` is not rendered yet: it is empty (TODO in the YAML). When
     photos are added, their fields (file, alt, caption) get rendered here.
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "leadership") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="leadership" class="section" aria-labelledby="leadership-title">
   <div class="container">
-    <h2 id="leadership-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("leadership") }}
 
     {% for item in leadership["items"] %}
     <article class="card leadership-card">

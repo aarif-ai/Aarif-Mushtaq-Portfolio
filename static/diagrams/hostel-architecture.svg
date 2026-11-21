@@ -9,7 +9,7 @@
   <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
     <rect class="d-box d-draw" x="10" y="8" width="280" height="48" rx="8" pathLength="1"/>
     <!-- Flask app: a container holding its 7 modules -->
-    <rect class="d-box d-box-accent d-draw" x="10" y="88" width="280" height="216" rx="10" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="88" width="280" height="216" rx="10" pathLength="1"/>
     <rect class="d-box d-draw" x="10" y="336" width="280" height="48" rx="8" pathLength="1"/>
   </g>
 

@@ -11,7 +11,6 @@
   );
   if (!links.length) return;
 
-  var nav = document.querySelector(".site-nav");
   var sections = links.map(function (link) {
     return document.getElementById(link.getAttribute("href").slice(1));
   });
@@ -29,16 +28,6 @@
         link.removeAttribute("aria-current");
       }
     });
-    // On phones the links scroll sideways inside the header: keep the
-    // current one in sight. Only the link strip moves, never the page.
-    if (index >= 0 && nav && nav.scrollWidth > nav.clientWidth) {
-      var link = links[index];
-      var left = link.offsetLeft;
-      var right = left + link.offsetWidth;
-      if (left < nav.scrollLeft || right > nav.scrollLeft + nav.clientWidth) {
-        nav.scrollLeft = left - 16;
-      }
-    }
   }
 
   /* Work out which section is current right now. */

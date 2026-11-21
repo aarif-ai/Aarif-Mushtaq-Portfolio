@@ -17,7 +17,12 @@ ui:
   theme_toggle: "Light theme"
   last_updated: "Last updated"
   education: "Education"
-  save_pdf: "Save as PDF"
+  download_pdf: "Download PDF"
+  show_details: "Show full details"
+  hide_details: "Hide details"
+  menu: "Menu"
+  back_to_top: "Back to top"
+  copyright: "© 2026"
 
 # Header section links. A link appears only once its section exists on the page.
 nav:
@@ -45,6 +50,7 @@ hero:
 
 links:
   resume: "/resume.html"
+  resume_pdf: "/docs/Aarif_Mushtaq_Resume.pdf"
   github: "https://github.com/aarif-ai"
   linkedin: "https://www.linkedin.com/in/aarif-mushtaq-167708398"
   email: "mailto:aarifmushtaq542@gmail.com"
@@ -100,5 +106,3 @@ about:
 contact:
   heading: "Open to AI/ML and software engineering internships."
   note: "Email is the fastest way to reach me."
-
-footer: "Built with Python, Jinja2, HTML, CSS and JavaScript, with help from Claude Code."

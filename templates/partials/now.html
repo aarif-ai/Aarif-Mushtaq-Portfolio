@@ -3,11 +3,11 @@
   The log is a real <table> with a caption and column headings, so screen
   readers can announce "Date" and "Entry" for every cell.
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "now") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="now" class="section" aria-labelledby="now-title">
   <div class="container">
-    <h2 id="now-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("now") }}
     <p class="updated reveal">{{ site.ui.last_updated }} {{ now.last_updated }}</p>
 
     <div class="now-grid">

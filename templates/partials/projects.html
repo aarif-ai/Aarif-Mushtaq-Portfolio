@@ -5,11 +5,11 @@
   (see .card-link in site.css); the card's own links sit above it.
   Never shown here: slug, status_kind, and the case-study fields.
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "projects") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="projects" class="section" aria-labelledby="projects-title">
   <div class="container">
-    <h2 id="projects-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("projects") }}
 
     <div class="project-grid">
       {% for project in projects["items"] %}

@@ -17,7 +17,10 @@
   {# Decorative background: drifting nodes joined by faint lines. #}
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
 
-  <div class="container hero-inner">
+  <div class="container">
+    {# Portrait first at every width, then eyebrow and name. #}
+    <img class="hero-photo" src="{{ site.person.photo }}" alt="{{ site.person.photo_alt }}"
+         width="440" height="440" fetchpriority="high" decoding="async">
     <div class="hero-text">
       <p class="eyebrow">{{ site.hero.eyebrow }}</p>
       <h1 id="hero-name">{{ site.person.name }}</h1>
@@ -31,9 +34,6 @@
         <li><a class="button" href="{{ site.links.email }}">{{ site.link_labels.email }}</a></li>
       </ul>
     </div>
-
-    <img class="hero-photo" src="{{ site.person.photo }}" alt="{{ site.person.photo_alt }}"
-         width="440" height="440" fetchpriority="high" decoding="async">
   </div>
 </section>
 

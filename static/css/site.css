@@ -36,6 +36,7 @@
   --accent-2: #818cf8;        /* indigo: "complete" */
   --on-accent: #04201c;       /* text placed on an accent background */
   --header-bg: rgb(10 14 20 / 0.85);
+  --footer-bg: #111823;      /* footer: one step lighter than the page */
   --show-moon: inline-block;  /* theme icon for the current theme */
   --show-sun: none;
 
@@ -58,6 +59,7 @@
   --space-4: 2rem;     /* 32px */
   --space-6: 3rem;     /* 48px */
   --space-8: 4rem;     /* 64px */
+  --space-10: 5rem;    /* 80px */
   --space-12: 6rem;    /* 96px */
 
   /* Layout & shape */
@@ -89,6 +91,7 @@
     --accent-2: #4f46e5;
     --on-accent: #ffffff;
     --header-bg: rgb(247 249 251 / 0.85);
+    --footer-bg: #eef2f6;
     --show-moon: none;
     --show-sun: inline-block;
   }
@@ -106,6 +109,7 @@
   --accent-2: #4f46e5;
   --on-accent: #ffffff;
   --header-bg: rgb(247 249 251 / 0.85);
+  --footer-bg: #eef2f6;
   --show-moon: none;
   --show-sun: inline-block;
 }
@@ -282,22 +286,18 @@ main:focus {
   text-decoration: none;
 }
 
-/* On small screens the links sit on their own row and scroll sideways
-   inside the header, so the page itself never scrolls sideways. */
+/* Below 60rem the links sit on their own row and wrap (never a sideways
+   scroll). Below 48rem, menu.js turns them into a "Menu" panel; without JS
+   they simply stay visible and wrapped. */
 .site-nav {
   order: 3;
   width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.site-nav::-webkit-scrollbar {
-  display: none;
 }
 
 .nav-list {
   display: flex;
-  gap: var(--space-1);
+  flex-wrap: wrap;
+  gap: 0 var(--space-1);
   margin: 0;
   padding: 0 0 var(--space-1);
   list-style: none;
@@ -334,6 +334,57 @@ main:focus {
 
   .nav-list {
     padding: 0;
+  }
+}
+
+/* Mobile menu (menu.js adds .has-menu to the header) */
+.menu-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.menu-toggle svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+@media (max-width: 47.99rem) {
+  .has-menu .menu-toggle {
+    display: inline-flex;
+    margin-right: var(--space-1);
+  }
+
+  .has-menu .site-nav {
+    display: none;
+  }
+
+  /* Open: a full-width panel under the header row, one link per row */
+  .has-menu.menu-open .site-nav {
+    display: block;
+    padding-block: var(--space-1) var(--space-2);
+    border-top: 1px solid var(--border);
+  }
+
+  .has-menu .nav-list {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .has-menu .nav-list a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;             /* 44px tap target */
+    font-size: 1.0625rem;
   }
 }
 
@@ -397,7 +448,10 @@ main:focus {
   position: relative;
   isolation: isolate;                /* keeps the canvas behind the text */
   overflow: hidden;
-  padding-block: var(--space-8) var(--space-12);
+  padding-block: var(--space-6) var(--space-8);
+  /* soft, static teal glow behind the portrait */
+  background: radial-gradient(40rem 28rem at 10% 0%,
+    color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%);
 }
 
 /* Network canvas fills the hero and fades out towards the bottom edge */
@@ -416,22 +470,19 @@ main:focus {
   opacity: 1;
 }
 
-.hero-inner {
-  display: grid;
-  gap: var(--space-4);
-  align-items: center;
-}
-
-/* Mobile: portrait above the name (visual order only; text comes first
-   in the HTML so screen readers meet the heading first). */
+/* Portrait first at every width, left-aligned with the text */
 .hero-photo {
-  order: -1;
-  width: 200px;
+  display: block;
+  width: 180px;
   height: auto;                      /* width/height attributes keep the 1:1 box */
+  margin-bottom: var(--space-4);
   border-radius: 50%;
   background: var(--surface);
-  /* thin accent ring with a small gap in the page colour */
-  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--accent);
+  /* thin teal ring with a gap in the page colour, plus a soft glow */
+  box-shadow:
+    0 0 0 4px var(--bg),
+    0 0 0 5px var(--accent),
+    0 0 48px 8px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .hero-text h1 {
@@ -472,34 +523,50 @@ main:focus {
   list-style: none;
 }
 
-/* Desktop: text on the left, portrait beside it on the right */
 @media (min-width: 48rem) {
   .hero {
-    padding-block: var(--space-12);
-  }
-
-  .hero-inner {
-    grid-template-columns: 1fr auto;
-    gap: var(--space-8);
+    padding-block: var(--space-8) var(--space-12);
   }
 
   .hero-photo {
-    order: 0;
+    width: 260px;
+    margin-bottom: var(--space-6);
   }
 }
 
 /* ---------- 10. Sections ---------- */
 .section {
-  padding-block: var(--space-8);
+  padding-block: var(--space-6);
 }
 
 .section-title {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+/* Numbered eyebrow above each home section title ("01 ——"), decoration only */
+.section-num {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: var(--space-1);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.section-num::after {
+  content: "";
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
 }
 
 @media (min-width: 48rem) {
   .section {
-    padding-block: var(--space-12);
+    padding-block: var(--space-10);
   }
 }
 
@@ -550,12 +617,15 @@ main:focus {
 }
 
 /* ---------- 12. Cards, pills, tags ---------- */
+/* Card text: 15–16px, line-height 1.55, lines never wider than 70ch */
 .card {
   position: relative;
-  padding: var(--space-3);
+  padding: 1.25rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
+  font-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+  line-height: 1.55;
 }
 
 @media (min-width: 48rem) {
@@ -655,6 +725,58 @@ main:focus {
 
 .field-list li + li {
   margin-top: 0.4rem;
+}
+
+/* "Show full details" / "Hide details": a native <details>, styled as a
+   button. The label swaps with the open state; works without JS. */
+.more {
+  margin-top: var(--space-3);
+}
+
+.more-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.more-toggle::-webkit-details-marker {
+  display: none;
+}
+
+/* chevron, decoration only: points down when closed, up when open */
+.more-toggle::after {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-0.15rem) rotate(45deg);
+}
+
+.more[open] > .more-toggle::after {
+  transform: translateY(0.1rem) rotate(-135deg);
+}
+
+.more-toggle:hover {
+  border-color: var(--accent);
+}
+
+.more[open] .more-closed,
+.more:not([open]) .more-open {
+  display: none;
+}
+
+.more-body > .field:first-child {
+  margin-top: var(--space-2);
 }
 
 .card-figure {
@@ -762,8 +884,11 @@ main:focus {
   pointer-events: none;
 }
 
-.card-glow:hover {
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+/* Every card: border tints teal under a mouse (the lift is in §21) */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  }
 }
 
 /* ---------- 15. Skills ---------- */
@@ -847,6 +972,27 @@ main:focus {
 
 .timeline-upcoming .timeline-what {
   color: var(--muted);
+}
+
+/* Desktop: two columns, dates on the left of the line, text on the right */
+@media (min-width: 48rem) {
+  .timeline {
+    max-width: 52rem;
+  }
+
+  .timeline-item {
+    margin-left: 11rem;
+    padding-bottom: var(--space-3);
+  }
+
+  .timeline-when {
+    position: absolute;
+    top: 0.2rem;
+    left: -11rem;
+    width: 9.5rem;
+    margin: 0;
+    text-align: right;
+  }
 }
 
 /* ---------- 17. Now & learning log ---------- */
@@ -977,22 +1123,121 @@ main:focus {
 }
 
 /* ---------- 20. Footer ---------- */
+/* Phones: stacked and centred, 44px tap targets.
+   Desktop: brand | section links | contact links, then a bottom row. */
 .site-footer {
-  border-top: 1px solid var(--border);
-  padding-block: var(--space-4);
+  position: relative;
+  background: var(--footer-bg);
   color: var(--muted);
   font-size: 0.9375rem;
 }
 
-.footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-1) var(--space-4);
+/* thin teal → indigo line across the top, decoration only */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 
-.footer-inner p {
+.footer-grid {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-6) var(--space-3);
+  text-align: center;
+}
+
+.footer-name {
+  margin: 0 0 0.25rem;
+  color: var(--text);
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.footer-tagline {
   margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;               /* 44px tap target */
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0 var(--space-3);
+  padding-block: var(--space-1);
+  border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-updated {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+@media (min-width: 48rem) {
+  .footer-grid {
+    grid-template-columns: 1.4fr 1.4fr 1fr;
+    justify-items: start;
+    align-items: start;
+    text-align: left;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+
+  /* 8 section links in two columns; 4 contact links in one */
+  .footer-sections {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    column-gap: var(--space-4);
+  }
+
+  .footer-contact {
+    flex-direction: column;
+  }
+
+  .site-footer .footer-links a {
+    min-height: 2.25rem;
+  }
+
+  /* © on the left; date and "Back to top" pushed to the right */
+  .footer-bottom .footer-updated {
+    margin-left: auto;
+  }
 }
 
 /* ---------- 20b. Case-study pages ---------- */
@@ -1122,10 +1367,6 @@ main:focus {
 .diagram .d-box {
   fill: var(--bg);
   stroke: var(--border-strong);
-}
-
-.diagram .d-box-accent {
-  stroke: var(--accent);
 }
 
 /* Supporting tools beside the main path: quieter border */
@@ -1389,6 +1630,13 @@ main:focus {
   to { stroke-dashoffset: 0; }
 }
 
+@keyframes more-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
 @keyframes fade-in {
   from { opacity: 0; }
 }
@@ -1473,6 +1721,16 @@ main:focus {
     transition: opacity 300ms var(--ease-out);
   }
 
+  /* Gentle lift. `translate` (not `transform`) so it doesn't fight the
+     scroll-reveal animation, which uses `transform`. */
+  .card {
+    transition: translate 200ms var(--ease-out);
+  }
+
+  .card:hover {
+    translate: 0 -3px;
+  }
+
   .card-glow:hover::before {
     opacity: 1;
   }
@@ -1497,6 +1755,16 @@ main:focus {
 
   .skip-link {
     transition: transform 150ms var(--ease-out);
+  }
+
+  /* Details open: content fades and drops in; the chevron turns.
+     (Closing is instant: CSS can't animate an element that is removed.) */
+  .more[open] > .more-body {
+    animation: more-in 300ms var(--ease-out);
+  }
+
+  .more-toggle::after {
+    transition: transform 200ms var(--ease-out);
   }
 
   /* Smooth colour change, only for the moment the theme is switched

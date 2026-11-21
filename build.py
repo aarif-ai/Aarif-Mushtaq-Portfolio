@@ -13,6 +13,7 @@ What it does, in order:
 
 from __future__ import annotations
 
+import hashlib
 import re
 import shutil
 import sys
@@ -61,6 +62,12 @@ PHONE_PATTERN = re.compile(
     r"|(?<![\w/.-])(?:\+\d{1,3}[\s-]?)?\d{5}[\s-]?\d{5}(?![\w/.-])"
     r"|(?<![\w/.-])\(?\d{3}\)?[\s-]\d{3}[\s-]\d{4}(?![\w/.-])"
 )
+
+# SHA-256 fingerprint of Aarif's private phone number (digits only). The
+# number itself must never appear in this public repository, so only its
+# fingerprint is stored: the build hashes every 10-digit run it finds in dist/
+# and fails on a match (see has_private_number).
+PRIVATE_NUMBER_SHA256 = "2d0865725b43dc9609270a4911f357072d90a814d3d588aee6a3e568d0a1575c"
 
 # Files no page may ever link to, with the reason (checked in every href/src).
 FORBIDDEN_FILES: dict[str, str] = {
@@ -278,8 +285,10 @@ def prepare_dist() -> None:
     """Delete the old dist/ folder and copy static/ into a fresh one."""
     if DIST_DIR.exists():
         shutil.rmtree(DIST_DIR)
+    # Not copied: private originals (img/ and docs/), and diagrams, which
+    # are placed inline in the pages instead (see load_svg).
     shutil.copytree(STATIC_DIR, DIST_DIR,
-                    ignore=shutil.ignore_patterns("originals"))
+                    ignore=shutil.ignore_patterns("originals", "diagrams"))
 
 
 # ----------------------------------------------------------------- checks
@@ -354,6 +363,48 @@ def check_local_links(page: Path, html: str) -> list[str]:
     return problems
 
 
+def has_private_number(text: str) -> bool:
+    """True if any 10 digits in a row in `text` are the private phone number.
+
+    Digits may be separated by spaces or dashes ("91034 81919"). Each 10-digit
+    window is hashed and compared with PRIVATE_NUMBER_SHA256.
+    """
+    for run in re.findall(r"\d(?:[\s-]?\d){9,}", text):
+        digits = re.sub(r"\D", "", run)
+        for start in range(len(digits) - 9):
+            window = digits[start:start + 10].encode()
+            if hashlib.sha256(window).hexdigest() == PRIVATE_NUMBER_SHA256:
+                return True
+    return False
+
+
+def searchable_text(path: Path) -> str:
+    """The text of any file in dist/, for the private-number check.
+
+    Always includes the raw bytes. For PDFs, the page text and metadata are
+    added via PyMuPDF when it is installed (requirements-dev.txt): PDF text
+    is usually compressed, so raw bytes alone can miss it. Netlify doesn't
+    install PyMuPDF, so there the raw-bytes search is used on its own.
+    """
+    text = path.read_bytes().decode("latin-1")
+    if path.suffix.lower() == ".pdf":
+        try:
+            import pymupdf
+        except ImportError:
+            return text
+        with pymupdf.open(path) as doc:
+            text += str(doc.metadata) + (doc.get_xml_metadata() or "")
+            text += "".join(page.get_text() for page in doc)
+    return text
+
+
+def check_dist_files() -> list[str]:
+    """Fail on any file in dist/ (HTML, CSS, JS, PDF, images…) with the private number."""
+    return [f"{path.relative_to(DIST_DIR).as_posix()}: contains the private phone number"
+            for path in sorted(DIST_DIR.rglob("*"))
+            if path.is_file() and has_private_number(searchable_text(path))]
+
+
 def check_pages(pages: list[Path]) -> list[str]:
     """Run every check on every page; return all problems with page names."""
     problems: list[str] = []
@@ -415,7 +466,7 @@ def main() -> int:
         print(f"\nBuild FAILED: template error: {error}")
         return 1
 
-    problems = check_pages(pages)
+    problems = check_pages(pages) + check_dist_files()
     if problems:
         print(f"\nBuild FAILED: {len(problems)} rule violation(s):")
         for problem in problems:

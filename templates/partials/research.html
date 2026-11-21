@@ -1,16 +1,35 @@
 {#
   Research section: one card per item in content/research.yaml.
-  Fields are shown in a fixed order, each only if the item has it.
+  Shown by default: status, title, meta, tags, Question, Next and links.
+  Everything else (Setup, What's built, Method, Findings, Contribution,
+  Limits, diagram, figure) sits in a native <details>, so the card stays
+  short and the toggle works without JavaScript. No scroll boxes inside
+  cards: they trap scrolling on phones.
   Never shown: slug, status_kind (only picks the pill colour), todo, and
-  diagram.boxes (notes for drawing the diagram in Step 8).
+  diagram.boxes (notes for drawing the diagram).
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "research") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 {% set list_fields = ["setup", "findings"] %}
-{% set field_order = ["question", "setup", "method", "built", "findings", "contribution", "next", "limits"] %}
+{% set detail_fields = ["setup", "method", "built", "findings", "contribution", "limits"] %}
+
+{% macro field(item, name) %}
+<div class="field">
+  <h4 class="field-label">{{ research.labels[name] }}</h4>
+  {% if name in list_fields %}
+  <ul class="field-list">
+    {% for line in item[name] %}
+    <li>{{ line }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>{{ item[name] }}</p>
+  {% endif %}
+</div>
+{% endmacro %}
 
 <section id="research" class="section" aria-labelledby="research-title">
   <div class="container">
-    <h2 id="research-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("research") }}
 
     <div class="research-grid">
       {% for item in research["items"] %}
@@ -25,25 +44,28 @@
           {% endfor %}
         </ul>
 
-        {% for field in field_order if item[field] is defined %}
-        <div class="field">
-          <h4 class="field-label">{{ research.labels[field] }}</h4>
-          {% if field in list_fields %}
-          <ul class="field-list">
-            {% for line in item[field] %}
-            <li>{{ line }}</li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p>{{ item[field] }}</p>
-          {% endif %}
-        </div>
-        {% endfor %}
+        {{ field(item, "question") }}
+        {{ field(item, "next") }}
 
-        {# Diagram / figure: only when build.py found the file in static/. #}
-        {% for visual in [item.diagram, item.figure] if visual is defined and visual.exists %}
-        {% include "partials/visual.html" %}
-        {% endfor %}
+        {% set visuals = [item.diagram, item.figure] | select("defined") | selectattr("exists") | list %}
+        {% set details = detail_fields | select("in", item.keys() | list) | list %}
+        {% if details or visuals %}
+        <details class="more">
+          <summary class="more-toggle">
+            <span class="more-closed">{{ site.ui.show_details }}</span>
+            <span class="more-open">{{ site.ui.hide_details }}</span>
+          </summary>
+          <div class="more-body">
+            {% for name in details %}
+            {{ field(item, name) }}
+            {% endfor %}
+            {# Diagram / figure: only when build.py found the file in static/. #}
+            {% for visual in visuals %}
+            {% include "partials/visual.html" %}
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
 
         {% set links = item.links %}
         {% include "partials/links.html" %}

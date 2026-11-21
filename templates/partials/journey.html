@@ -3,11 +3,11 @@
   An item with `upcoming: true` is drawn differently: hollow dot and a
   dashed line (not colour alone), and its text already starts with "Next:".
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "journey") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="journey" class="section" aria-labelledby="journey-title">
   <div class="container">
-    <h2 id="journey-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("journey") }}
 
     <ol class="timeline">
       {% for item in site.timeline %}

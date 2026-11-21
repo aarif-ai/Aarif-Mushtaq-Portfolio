@@ -20,7 +20,7 @@ items:
     status_kind: "complete"
     stack: ["Python", "Flask", "SQLAlchemy", "PostgreSQL", "pytest", "GitHub Actions"]
     card: "A Flask platform that runs the full lifecycle of a campus event for 4 roles, with QR attendance, PDF certificates, 351 tests and CI."
-    problem: "Running a campus event involves several people. An organiser proposes it, the department approves it, logistics prepares it, and students attend and need certificates. CampusHub puts the whole lifecycle (Draft → Submitted → Approved/Rejected → Published → Completed) in one web app, with a separate role for each person."
+    problem: "Running a campus event involves several people. An organiser proposes it, the department approves it, logistics prepares it, and students attend and need certificates. CampusHub puts the whole lifecycle (Draft → Submitted → Approved or Rejected → Published → Completed; a rejected event goes back to Draft) in one web app, with a separate role for each person."
     role: "Solo project. I designed and built it with AI assistance (Claude), and I can walk through and explain every module."
     architecture:
       text: "Browser → Flask routes (kept thin) → 25 service modules → SQLAlchemy models → SQLite (development) / PostgreSQL. Alongside: Alembic migrations, ReportLab (PDF certificates), Resend (email), GitHub Actions CI."
@@ -28,7 +28,7 @@ items:
         - file: "/diagrams/campushub-architecture.svg"
           alt: "CampusHub architecture: browser to thin Flask routes, to 25 service modules, to SQLAlchemy models, to SQLite or PostgreSQL; side components Alembic, ReportLab, Resend and GitHub Actions CI."
         - file: "/diagrams/campushub-lifecycle.svg"
-          alt: "Event lifecycle: Draft, Submitted, then Approved or Rejected, Published, Completed."
+          alt: "Event lifecycle: Draft, Submitted, then Approved or Rejected; a rejected event returns to Draft; Approved events are Published, then Completed."
     decisions:
       - title: "Business logic in a service layer, not in routes"
         body: "Routes only handle HTTP. The 25 service modules hold the rules (who can approve what, when an event can be published), so they live in one place and can be tested without a browser."

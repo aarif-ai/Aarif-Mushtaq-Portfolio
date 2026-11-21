@@ -3,6 +3,7 @@ dist/
 __pycache__/
 *.pyc
 static/img/originals/
+static/docs/originals/
 .DS_Store
 Thumbs.db
 .netlify/

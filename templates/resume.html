@@ -6,7 +6,8 @@
     case study's title appearing in the resume title).
   - Research titles link to the Research section on the home page.
   - Empty `when`, `link` or `bullets` render nothing.
-  The print stylesheet (site.css, @media print) turns this into an A4 page.
+  "Download PDF" serves the real resume PDF; the print stylesheet
+  (site.css, @media print) still gives a clean A4 printout.
 #}
 {% extends "base.html" %}
 
@@ -15,18 +16,14 @@
 
 {% block title %}{{ site.link_labels.resume }} · {{ resume.name }}{% endblock %}
 
-{% block scripts %}
-  <script src="/js/resume-print.js" defer></script>
-{% endblock %}
-
 {% block content %}
 {# id → label lookup for the header nav labels, e.g. nav_label.research #}
 {% set nav_label = {} %}
 {% for item in site.nav %}{% set _ = nav_label.update({item.id: item.label}) %}{% endfor %}
 <div class="container resume-wrap">
   <p class="resume-actions">
-    {# Hidden until resume-print.js runs: without JS it couldn't work. #}
-    <button type="button" class="button button-primary print-button" hidden>{{ site.ui.save_pdf }}</button>
+    {# The real ATS resume (phone number removed by scripts/make_public_resume.py). #}
+    <a class="button button-primary" href="{{ site.links.resume_pdf }}" download>{{ site.ui.download_pdf }}</a>
   </p>
 
   <article class="paper" aria-labelledby="resume-name">

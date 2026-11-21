@@ -1,9 +1,9 @@
 {# About: paragraphs from site.yaml `about`. `italic` turns *title* into <em>. #}
-{% set heading = (site.nav | selectattr("id", "equalto", "about") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="about" class="section" aria-labelledby="about-title">
   <div class="container">
-    <h2 id="about-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("about") }}
     <div class="about-text">
       {% for paragraph in site.about %}
       <p class="reveal">{{ paragraph | italic }}</p>

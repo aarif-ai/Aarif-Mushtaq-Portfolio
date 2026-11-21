@@ -10,7 +10,14 @@
     <a class="brand" href="/">{{ site.person.name }}</a>
 
     {% if nav_links %}
-    <nav class="site-nav">
+    {# Shown only below 48rem, and only once menu.js has set things up. #}
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+      {{ site.ui.menu }}
+    </button>
+    <nav id="site-nav" class="site-nav">
       <ul class="nav-list">
         {% for item in nav_links %}
         <li><a href="{{ '' if is_home else '/' }}#{{ item.id }}">{{ item.label }}</a></li>

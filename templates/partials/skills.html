@@ -3,11 +3,11 @@
   Each level shows its label and definition, then its groups as plain
   tags. No bars, icons, percentages or ratings, ever.
 #}
-{% set heading = (site.nav | selectattr("id", "equalto", "skills") | first).label %}
+{% from "partials/macros.html" import section_title with context %}
 
 <section id="skills" class="section" aria-labelledby="skills-title">
   <div class="container">
-    <h2 id="skills-title" class="section-title">{{ heading }}</h2>
+    {{ section_title("skills") }}
 
     <div class="skills-grid">
       {% for level in [skills.proficient, skills.familiar] %}

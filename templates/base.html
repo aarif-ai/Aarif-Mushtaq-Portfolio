@@ -11,9 +11,10 @@
   {# Blocking on purpose: applies the saved theme before first paint. #}
   <script src="/js/theme-init.js"></script>
   <script src="/js/theme-toggle.js" defer></script>
+  <script src="/js/menu.js" defer></script>
   {% block scripts %}{% endblock %}
 </head>
-<body>
+<body id="top">
   <a class="skip-link" href="#main">{{ site.ui.skip_link }}</a>
   {# Reading progress bar: pure CSS (scroll timeline), decoration only. #}
   <div class="reading-progress" aria-hidden="true"></div>
@@ -24,10 +25,36 @@
     {% block content %}{% endblock %}
   </main>
 
+  {#
+    Footer on every page. All text from site.yaml: the hero eyebrow is
+    reused as the tagline; section links are the header nav (on other
+    pages they point to /#id); contact links reuse site.links/link_labels.
+  #}
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>{{ site.footer }}</p>
-      <p>{{ site.ui.last_updated }} {{ site.last_updated }}</p>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <p class="footer-name">{{ site.person.name }}</p>
+        <p class="footer-tagline">{{ site.hero.eyebrow }}</p>
+      </div>
+
+      <ul class="footer-links footer-sections">
+        {% for item in site.nav %}
+        <li><a href="{{ '' if is_home else '/' }}#{{ item.id }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+
+      <ul class="footer-links footer-contact">
+        <li><a href="{{ site.links.email }}">{{ site.link_labels.email }}</a></li>
+        <li><a href="{{ site.links.github }}">{{ site.link_labels.github }}</a></li>
+        <li><a href="{{ site.links.linkedin }}">{{ site.link_labels.linkedin }}</a></li>
+        <li><a href="{{ site.links.resume }}">{{ site.link_labels.resume }}</a></li>
+      </ul>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>{{ site.ui.copyright }} {{ site.person.name }}</p>
+      <p class="footer-updated">{{ site.ui.last_updated }} {{ site.last_updated }}</p>
+      <p><a href="#top">{{ site.ui.back_to_top }} <span aria-hidden="true">↑</span></a></p>
     </div>
   </footer>
 </body>

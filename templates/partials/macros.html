@@ -1,0 +1,12 @@
+{#
+  section_title(id): the <h2> of a home-page section.
+  - The heading text is that section's nav label from site.yaml.
+  - A small numbered eyebrow ("01", "02", …) comes from the section's
+    position in site.nav. It is decoration (aria-hidden), so screen readers
+    hear only "Research", not "zero one Research".
+  Use: {% from "partials/macros.html" import section_title with context %}
+#}
+{% macro section_title(id) -%}
+{%- set ids = site.nav | map(attribute="id") | list -%}
+<h2 id="{{ id }}-title" class="section-title"><span class="section-num" aria-hidden="true">{{ "%02d" | format(ids.index(id) + 1) }}</span>{{ (site.nav | selectattr("id", "equalto", id) | first).label }}</h2>
+{%- endmacro %}
