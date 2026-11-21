@@ -1,0 +1,104 @@
+{#
+  One case-study page per project in content/projects.yaml (build.py passes
+  the project as `project`). Sections appear only when the project has
+  them: Hostel has no Security/Testing, so those are skipped.
+  `screenshots` isn't rendered yet: it's empty (to be added later).
+#}
+{% extends "base.html" %}
+
+{% set nav_sections = site.nav | map(attribute="id") | list %}
+{% set is_home = false %}
+{% set labels = projects.labels %}
+
+{# Build the list of sections once; the table of contents and the page body
+   both use it, so they can never disagree. #}
+{% set sections = ["problem", "role", "architecture", "decisions"]
+   + (["security"] if project.security is defined else [])
+   + (["testing"] if project.testing is defined else []) %}
+
+{% block title %}{{ project.title }} · {{ site.person.name }}{% endblock %}
+
+{% block content %}
+<article class="case" aria-labelledby="case-title">
+  <header class="case-header">
+    <div class="container">
+      <p class="back-link-wrap"><a class="back-link" href="/#projects">{{ labels.back }}</a></p>
+      <p class="status-pill status-{{ project.status_kind }}">{{ project.status }}</p>
+      <h1 id="case-title" class="case-title" data-vt="{{ project.slug }}">{{ project.title }}</h1>
+      <p class="case-subtitle">{{ project.subtitle }}</p>
+      <ul class="tags">
+        {% for tech in project.stack %}
+        <li>{{ tech }}</li>
+        {% endfor %}
+      </ul>
+      {% set links = project.links %}
+      {% include "partials/links.html" %}
+    </div>
+  </header>
+
+  <div class="container case-layout">
+    <nav class="toc" aria-labelledby="toc-title">
+      <p id="toc-title" class="toc-title">{{ labels.toc }}</p>
+      <ol class="toc-list">
+        {% for key in sections %}
+        <li><a href="#{{ key }}">{{ labels[key] }}</a></li>
+        {% endfor %}
+        <li><a href="#reflection">{{ project.reflection_title }}</a></li>
+      </ol>
+    </nav>
+
+    <div class="case-body">
+      <section id="problem" class="case-section" aria-labelledby="problem-title">
+        <h2 id="problem-title">{{ labels.problem }}</h2>
+        <p>{{ project.problem }}</p>
+      </section>
+
+      <section id="role" class="case-section" aria-labelledby="role-title">
+        <h2 id="role-title">{{ labels.role }}</h2>
+        <p>{{ project.role }}</p>
+      </section>
+
+      <section id="architecture" class="case-section" aria-labelledby="architecture-title">
+        <h2 id="architecture-title">{{ labels.architecture }}</h2>
+        <p>{{ project.architecture.text }}</p>
+        {# Diagrams appear only once build.py finds the file (Step 8). #}
+        {% for diagram in project.architecture.diagrams if diagram.exists %}
+        <figure class="case-figure">
+          <img src="{{ diagram.file }}" alt="{{ diagram.alt }}"
+               width="{{ diagram.width }}" height="{{ diagram.height }}"
+               loading="lazy" decoding="async">
+        </figure>
+        {% endfor %}
+      </section>
+
+      <section id="decisions" class="case-section" aria-labelledby="decisions-title">
+        <h2 id="decisions-title">{{ labels.decisions }}</h2>
+        <ol class="decision-list">
+          {% for decision in project.decisions %}
+          <li class="card decision-card">
+            <h3 class="decision-title">{{ decision.title }}</h3>
+            <p>{{ decision.body }}</p>
+          </li>
+          {% endfor %}
+        </ol>
+      </section>
+
+      {% for key in sections if key in ["security", "testing"] %}
+      <section id="{{ key }}" class="case-section" aria-labelledby="{{ key }}-title">
+        <h2 id="{{ key }}-title">{{ labels[key] }}</h2>
+        <p>{{ project[key] }}</p>
+      </section>
+      {% endfor %}
+
+      <section id="reflection" class="case-section" aria-labelledby="reflection-title">
+        <h2 id="reflection-title">{{ project.reflection_title }}</h2>
+        <ul class="plain-list">
+          {% for line in project.reflection %}
+          <li>{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+</article>
+{% endblock %}

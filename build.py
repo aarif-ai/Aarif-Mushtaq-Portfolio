@@ -145,12 +145,23 @@ def add_file_flags(data: Any) -> None:
 def add_page_flags(content: dict[str, Any]) -> None:
     """Mark each project with `has_page`: will its case-study page be built?
 
-    Case-study pages come from templates/case_study.html (Step 7). Until that
-    template exists, project cards show the title as plain text instead of a
-    link to a page that doesn't exist yet.
+    Case-study pages come from templates/case_study.html. Without that
+    template, project cards show the title as plain text instead of a link
+    to a page that doesn't exist.
+
+    Also checks that each slug is simple (a-z, 0-9, -) and that `page`
+    matches the file the build writes, /<slug>.html, so a typo in the YAML
+    fails the build instead of producing a broken link.
     """
     has_template = (TEMPLATES_DIR / "case_study.html").exists()
     for project in content["projects"]["items"]:
+        slug = project["slug"]
+        if not re.fullmatch(r"[a-z0-9-]+", slug):
+            raise SystemExit(f"Build failed: project slug '{slug}' may only "
+                             "use a-z, 0-9 and -")
+        if project["page"] != f"/{slug}.html":
+            raise SystemExit(f"Build failed: project '{slug}' has page "
+                             f"'{project['page']}', expected '/{slug}.html'")
         project["has_page"] = has_template
 
 
@@ -198,6 +209,10 @@ def write_page(env: Environment, template_name: str, out_name: str,
 def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
     """Render index.html, one page per project, and 404.html.
 
+    Also renders css/view-transitions.css, which gives each project title a
+    unique transition name (see that template). It is a stylesheet, not a
+    page, so it isn't in the returned list of pages.
+
     Templates that haven't been written yet (case_study.html and 404.html
     arrive in later build steps) are skipped with a note, not an error.
     """
@@ -216,6 +231,7 @@ def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
     else:
         print("  note: templates/404.html not created yet - skipped")
 
+    write_page(env, "view-transitions.css", "css/view-transitions.css", content)
     return pages
 
 

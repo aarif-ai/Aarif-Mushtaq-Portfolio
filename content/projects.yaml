@@ -1,4 +1,16 @@
 # Projects. Each has a home-page card and its own case-study page.
+
+# Words used on every case-study page (approved by Aarif, 21 Nov 2026).
+labels:
+  problem: "Problem"
+  role: "My role"
+  architecture: "Architecture"
+  decisions: "Key decisions"
+  security: "Security"
+  testing: "Testing"
+  toc: "On this page"
+  back: "Back to projects"
+
 items:
   - slug: "campushub"
     page: "/campushub.html"

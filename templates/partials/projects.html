@@ -15,7 +15,7 @@
       {% for project in projects["items"] %}
       <article class="card card-glow project-card" aria-labelledby="project-{{ project.slug }}">
         <p class="status-pill status-{{ project.status_kind }}">{{ project.status }}</p>
-        <h3 id="project-{{ project.slug }}" class="card-title">
+        <h3 id="project-{{ project.slug }}" class="card-title" data-vt="{{ project.slug }}">
           {% if project.has_page %}
           <a class="card-link" href="{{ project.page }}">{{ project.title }}</a>
           {% else %}
