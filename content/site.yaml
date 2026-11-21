@@ -42,6 +42,9 @@ ui:
   hide_details: "Hide details"
   menu: "Menu"
   back_to_top: "Back to top"
+  copy: "Copy"
+  copied: "Copied"
+  copy_email: "Copy email address"
   copyright: "© 2026"
 
 # Header section links. A link appears only once its section exists on the page.
@@ -148,6 +151,10 @@ about:
           href: "#leadership"
         - text: "Completed a novella, *From Innocence to Ashes*."
 
+# Contact: the cards reuse link_labels (Email, LinkedIn, GitHub, Resume),
+# links.* and person.email/name; only these two link texts are new.
 contact:
   heading: "Open to AI/ML and software engineering internships."
-  note: "Email is the fastest way to reach me."
+  note: "Email is the fastest way to reach me. Based in Kashmir, India (IST, UTC+5:30)."
+  resume_web: "Web"
+  resume_pdf: "PDF"

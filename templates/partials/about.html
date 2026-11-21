@@ -11,7 +11,7 @@
     {{ section_title("about") }}
     <p class="about-intro reveal">{{ site.about.intro }}</p>
 
-    <dl class="card about-facts">
+    <dl class="card fact-grid">
       {% for fact in site.about.facts %}
       <div>
         <dt class="field-label">{{ fact.label }}</dt>

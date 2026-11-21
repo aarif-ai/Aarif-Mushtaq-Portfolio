@@ -1126,22 +1126,23 @@ main:focus {
 }
 
 /* ---------- 19. About & contact ---------- */
-/* About: intro, facts strip (2×2 on phones, one row on desktop) and three
-   blocks; reuses .card, .field-label and .plain-list */
+/* About: intro, facts strip and three blocks; reuses .card, .field-label,
+   .plain-list. .fact-grid (2×2 on phones, one row on desktop) is shared
+   with the Contact cards. */
 .about-intro {
   font-size: var(--step-1);
   line-height: 1.5;
   max-width: 52ch;
 }
 
-.about-facts {
+.fact-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2) var(--space-3);
   margin: var(--space-4) 0 var(--space-3);
 }
 
-.about-facts dd {
+.fact-grid dd {
   margin: 0;
   font-weight: 600;
 }
@@ -1152,7 +1153,7 @@ main:focus {
 }
 
 @media (min-width: 48rem) {
-  .about-facts {
+  .fact-grid {
     grid-template-columns: 2fr repeat(3, 1fr);
   }
 
@@ -1174,13 +1175,35 @@ main:focus {
   color: var(--muted);
 }
 
-.contact-email {
-  font-size: var(--step-1);
-  overflow-wrap: anywhere;           /* long address never forces a sideways scroll */
+/* Contact: a .fact-grid of separate cards; long addresses wrap */
+.contact-grid {
+  padding: 0;
+  list-style: none;
 }
 
-.contact-email a {
+.contact-grid p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.contact-grid a {
   font-weight: 600;
+}
+
+.contact-links {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.copy-button[hidden] {
+  display: none;
+}
+
+/* Narrow phones: the Email card spans both columns, so the address fits */
+@media (max-width: 40rem) {
+  .contact-grid > :first-child {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ---------- 20. Footer ---------- */
@@ -1699,7 +1722,7 @@ main:focus {
   .brand,
   .back-link,
   .card-links a,
-  .contact-email a,
+  .contact-grid a,
   .paper-contact a,
   .r-title a,
   .r-when a,

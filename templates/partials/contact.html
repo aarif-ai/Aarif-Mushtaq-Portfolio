@@ -1,21 +1,44 @@
 {#
-  Contact from site.yaml `contact`. The email address itself is the main
-  link (its text says exactly where it goes); the other links reuse the
-  hero's buttons. No form, no phone number.
+  Contact from site.yaml: heading, note, then four link cards in the shared
+  .fact-grid (same grid as About's facts). Each card shows where its link
+  goes. Labels reuse link_labels; addresses reuse links.* and person.*,
+  so nothing is copied. No form, no phone number.
+  site.ui["copy"] needs brackets: site.ui.copy would find the dict's own
+  .copy() method instead of the YAML key.
+  The "Copy" button is hidden until nav-active.js finds a working clipboard
+  API; without it the mailto link still works.
 #}
 {% from "partials/macros.html" import section_title with context %}
 
 <section id="contact" class="section" aria-labelledby="contact-title">
-  <div class="container contact-inner reveal">
+  <div class="container">
     {{ section_title("contact") }}
-    <p class="contact-heading">{{ site.contact.heading }}</p>
+    <p class="contact-heading reveal">{{ site.contact.heading }}</p>
     <p class="contact-note">{{ site.contact.note }}</p>
-    <p class="contact-email"><a href="{{ site.links.email }}">{{ site.person.email }}</a></p>
 
-    <ul class="button-row">
-      <li><a class="button" href="{{ site.links.linkedin }}">{{ site.link_labels.linkedin }}</a></li>
-      <li><a class="button" href="{{ site.links.github }}">{{ site.link_labels.github }}</a></li>
-      <li><a class="button" href="{{ site.links.resume }}">{{ site.link_labels.resume }}</a></li>
+    <ul class="fact-grid contact-grid">
+      <li class="card">
+        <p class="field-label">{{ site.link_labels.email }}</p>
+        <p><a href="{{ site.links.email }}">{{ site.person.email }}</a></p>
+        <button type="button" class="button copy-button" aria-label="{{ site.ui.copy_email }}" data-copy="{{ site.person.email }}"
+                data-copied="{{ site.ui.copied }}" hidden>{{ site.ui["copy"] }}</button>
+        <span class="visually-hidden" aria-live="polite"></span>
+      </li>
+      <li class="card">
+        <p class="field-label">{{ site.link_labels.linkedin }}</p>
+        <p><a href="{{ site.links.linkedin }}">{{ site.person.name }}</a></p>
+      </li>
+      <li class="card">
+        <p class="field-label">{{ site.link_labels.github }}</p>
+        <p><a href="{{ site.links.github }}">{{ site.links.github | replace("https://", "") }}</a></p>
+      </li>
+      <li class="card">
+        <p class="field-label">{{ site.link_labels.resume }}</p>
+        <p class="contact-links">
+          <a href="{{ site.links.resume }}">{{ site.contact.resume_web }}</a>
+          <a href="{{ site.links.resume_pdf }}" target="_blank" rel="noopener">{{ site.contact.resume_pdf }}</a>
+        </p>
+      </li>
     </ul>
   </div>
 </section>

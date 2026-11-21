@@ -60,3 +60,32 @@
   window.addEventListener("resize", onScroll);
   update();
 })();
+
+/* Contact "Copy" button for the email address.
+   Shown only when the Clipboard API exists (it stays hidden without JS or
+   on old browsers; the mailto link works either way). On success the label
+   reads "Copied" for 2 seconds and the aria-live region next to it
+   announces it to screen readers. If copying fails, nothing changes. */
+(function () {
+  var button = document.querySelector(".copy-button");
+  if (!button || !navigator.clipboard || !navigator.clipboard.writeText) return;
+
+  var label = button.textContent;
+  var status = button.nextElementSibling; // <span aria-live="polite">
+  var timer = 0;
+
+  button.addEventListener("click", function () {
+    navigator.clipboard.writeText(button.getAttribute("data-copy")).then(function () {
+      var copied = button.getAttribute("data-copied");
+      button.textContent = copied;
+      status.textContent = copied;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(function () {
+        button.textContent = label;
+        status.textContent = "";
+      }, 2000);
+    }, function () { /* copy refused: the mailto link still works */ });
+  });
+
+  button.hidden = false;
+})();
