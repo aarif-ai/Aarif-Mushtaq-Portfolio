@@ -4,6 +4,9 @@
    when its section is built (research, projects, skills, ...). #}
 {% set nav_sections = ["research", "projects", "skills", "journey", "now", "leadership", "about", "contact"] %}
 {% set is_home = true %}
+{% set page_title = site.person.name ~ " — " ~ site.hero.eyebrow %}
+{% set page_description = site.seo.home %}
+{% set page_path = "/" %}
 
 {% block scripts %}
   <script src="/js/hero-network.js" defer></script>

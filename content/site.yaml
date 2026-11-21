@@ -1,6 +1,25 @@
 # Site-wide content. Every claim must match Master_Profile.md and Resume v1.
 last_updated: "21 Nov 2026"
 
+# The live address. One value, used for canonical links, Open Graph,
+# robots.txt and sitemap.xml. Must start with https://.
+url: "https://aarif-mushtaq.netlify.app"
+
+# Search results and link previews. Each description: 140–160 characters,
+# built only from wording used elsewhere in the content files.
+seo:
+  image: "/img/og.png"            # 1200×630, made by scripts/make_og.py
+  image_alt: "Aarif Mushtaq — AI & Data Science · LLM research · Python engineering"
+  home: "Aarif Mushtaq: faculty-supervised research on open-weight LLM agent teams and tested, database-backed web applications in Python. Looking for AI/ML internships."
+  resume: "Resume of Aarif Mushtaq, B.Tech student in Artificial Intelligence & Data Science doing faculty-supervised research on open-weight LLM agent teams."
+  not_found: "This page doesn't exist. Aarif Mushtaq does faculty-supervised research on open-weight LLM agent teams and builds tested web applications in Python."
+
+# 404 page.
+not_found:
+  code: "404"
+  message: "This page doesn't exist."
+  home: "Home"
+
 person:
   name: "Aarif Mushtaq"
   degree: "B.Tech in Artificial Intelligence & Data Science"

@@ -13,8 +13,9 @@
 
 {% set nav_sections = site.nav | map(attribute="id") | list %}
 {% set is_home = false %}
-
-{% block title %}{{ site.link_labels.resume }} · {{ resume.name }}{% endblock %}
+{% set page_title = site.link_labels.resume ~ " · " ~ resume.name %}
+{% set page_description = site.seo.resume %}
+{% set page_path = site.links.resume %}
 
 {% block content %}
 {# id → label lookup for the header nav labels, e.g. nav_label.research #}

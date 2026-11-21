@@ -1274,6 +1274,15 @@ main:focus {
   }
 }
 
+/* 404 page */
+.not-found {
+  padding-block: var(--space-12);
+}
+
+.not-found h1 {
+  font-size: var(--step-3);
+}
+
 /* ---------- 20b. Case-study pages ---------- */
 .case-header {
   padding-block: var(--space-6) var(--space-4);

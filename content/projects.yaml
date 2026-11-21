@@ -19,6 +19,7 @@ items:
     status: "Complete — not deployed yet"
     status_kind: "complete"
     stack: ["Python", "Flask", "SQLAlchemy", "PostgreSQL", "pytest", "GitHub Actions"]
+    description: "A Flask platform that runs the full lifecycle of a campus event for 4 roles, with QR attendance, PDF certificates, 351 tests and CI. By Aarif Mushtaq."
     card: "A Flask platform that runs the full lifecycle of a campus event for 4 roles, with QR attendance, PDF certificates, 351 tests and CI."
     problem: "Running a campus event involves several people. An organiser proposes it, the department approves it, logistics prepares it, and students attend and need certificates. CampusHub puts the whole lifecycle (Draft → Submitted → Approved or Rejected → Published → Completed; a rejected event goes back to Draft) in one web app, with a separate role for each person."
     role: "Solo project. I designed and built it with AI assistance (Claude), and I can walk through and explain every module."
@@ -58,6 +59,7 @@ items:
     status: "Complete — not deployed"
     status_kind: "complete"
     stack: ["Python", "Flask", "SQLite", "Bootstrap", "JavaScript"]
+    description: "A Flask and SQLite admin app for rooms, attendance, fees, complaints, visitors and food-wastage fines. Semester 2 group project; I wrote all the code."
     card: "A Flask and SQLite admin app for rooms, attendance, fees, complaints, visitors and food-wastage fines."
     problem: "Hostel administration was tracked by hand: who lives in which room, daily attendance, fees, complaints and visitors. This app puts it in one admin web app."
     role: "Semester 2 group project. I wrote all the code; teammates helped prepare the project report."

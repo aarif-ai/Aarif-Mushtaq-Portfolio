@@ -1,0 +1,25 @@
+{#
+  404 page. Netlify serves dist/404.html for any address that doesn't exist,
+  at any depth (/a/b/c), so every link and asset here uses an absolute path
+  ("/…"). Hidden from search engines (noindex). Text from site.yaml.
+#}
+{% extends "base.html" %}
+
+{% set nav_sections = site.nav | map(attribute="id") | list %}
+{% set is_home = false %}
+{% set noindex = true %}
+{% set page_title = site.not_found.code ~ " · " ~ site.person.name %}
+{% set page_description = site.seo.not_found %}
+{% set page_path = "/404.html" %}
+
+{% block content %}
+<section class="not-found container" aria-labelledby="not-found-title">
+  <p class="eyebrow">{{ site.not_found.code }}</p>
+  <h1 id="not-found-title">{{ site.not_found.message }}</h1>
+  <ul class="button-row">
+    <li><a class="button button-primary" href="/">{{ site.not_found.home }}</a></li>
+    <li><a class="button" href="/#projects">{{ (site.nav | selectattr("id", "equalto", "projects") | first).label }}</a></li>
+    <li><a class="button" href="{{ site.links.resume }}">{{ site.link_labels.resume }}</a></li>
+  </ul>
+</section>
+{% endblock %}

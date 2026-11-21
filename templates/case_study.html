@@ -8,6 +8,9 @@
 
 {% set nav_sections = site.nav | map(attribute="id") | list %}
 {% set is_home = false %}
+{% set page_title = project.title ~ " · " ~ site.person.name %}
+{% set page_description = project.description %}
+{% set page_path = project.page %}
 {% set labels = projects.labels %}
 
 {# Build the list of sections once; the table of contents and the page body
@@ -15,8 +18,6 @@
 {% set sections = ["problem", "role", "architecture", "decisions"]
    + (["security"] if project.security is defined else [])
    + (["testing"] if project.testing is defined else []) %}
-
-{% block title %}{{ project.title }} · {{ site.person.name }}{% endblock %}
 
 {% block content %}
 <article class="case" aria-labelledby="case-title">

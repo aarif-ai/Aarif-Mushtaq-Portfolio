@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from datetime import datetime
 import shutil
 import sys
 from html.parser import HTMLParser
@@ -256,8 +257,9 @@ def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
     unique transition name (see that template). It is a stylesheet, not a
     page, so it isn't in the returned list of pages.
 
-    Templates that haven't been written yet (case_study.html and 404.html
-    arrive in later build steps) are skipped with a note, not an error.
+    Templates that haven't been written yet are skipped with a note, not an
+    error. templates/og.html is never rendered here: it is only used by
+    scripts/make_og.py to draw the social preview image.
     """
     pages = [write_page(env, "index.html", "index.html", content)]
 
@@ -279,6 +281,40 @@ def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
 
     write_page(env, "view-transitions.css", "css/view-transitions.css", content)
     return pages
+
+
+def check_site_url(content: dict[str, Any]) -> str:
+    """Return site.url without a trailing slash; stop if it's missing or not https."""
+    url = content["site"].get("url")
+    if not isinstance(url, str) or not url.startswith("https://"):
+        raise SystemExit("Build failed: site.url in content/site.yaml must be set "
+                         "and start with https://")
+    return url.rstrip("/")
+
+
+def write_robots_and_sitemap(site_url: str, pages: list[Path], updated: str) -> None:
+    """Write dist/robots.txt (allow all) and dist/sitemap.xml (every page but 404).
+
+    `updated` is site.last_updated ("21 Nov 2026"); the sitemap wants it as
+    an ISO date (2026-11-21) in <lastmod>.
+    """
+    (DIST_DIR / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\n\nSitemap: {site_url}/sitemap.xml\n",
+        encoding="utf-8", newline="\n")
+
+    lastmod = datetime.strptime(updated, "%d %b %Y").date().isoformat()
+    urls = []
+    for page in pages:
+        if page.name == "404.html":
+            continue
+        path = "/" if page.name == "index.html" else f"/{page.name}"
+        urls.append(f"  <url>\n    <loc>{site_url}{path}</loc>\n"
+                    f"    <lastmod>{lastmod}</lastmod>\n  </url>\n")
+    (DIST_DIR / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "".join(urls) + "</urlset>\n",
+        encoding="utf-8", newline="\n")
 
 
 def prepare_dist() -> None:
@@ -405,12 +441,41 @@ def check_dist_files() -> list[str]:
             if path.is_file() and has_private_number(searchable_text(path))]
 
 
+def check_head_tags(html: str) -> list[str]:
+    """Every page needs a <title>, a meta description and an og:image."""
+    problems: list[str] = []
+    if not re.search(r"<title>\s*\S[^<]*</title>", html):
+        problems.append("missing or empty <title>")
+    if not re.search(r'<meta name="description" content="[^"]+"', html):
+        problems.append("missing meta description")
+    if not re.search(r'<meta property="og:image" content="https://[^"]+"', html):
+        problems.append("missing og:image (absolute https URL)")
+    return problems
+
+
+def check_og_image(content: dict[str, Any]) -> list[str]:
+    """The social preview image must exist in dist/ and be 1200×630 pixels.
+
+    PNG stores width and height as two 4-byte numbers at bytes 16–24.
+    """
+    path = DIST_DIR / content["site"]["seo"]["image"].lstrip("/")
+    if not path.is_file():
+        return [f"{path.relative_to(DIST_DIR).as_posix()} is missing "
+                "(run: python scripts/make_og.py)"]
+    header = path.read_bytes()[:24]
+    size = (int.from_bytes(header[16:20], "big"), int.from_bytes(header[20:24], "big"))
+    if header[:8] != b"\x89PNG\r\n\x1a\n" or size != (1200, 630):
+        return [f"{path.name} must be a 1200×630 PNG (got {size})"]
+    return []
+
+
 def check_pages(pages: list[Path]) -> list[str]:
     """Run every check on every page; return all problems with page names."""
     problems: list[str] = []
     for page in pages:
         html = page.read_text(encoding="utf-8")
-        for problem in check_text_rules(html) + check_local_links(page, html):
+        found = check_text_rules(html) + check_local_links(page, html) + check_head_tags(html)
+        for problem in found:
             problems.append(f"{page.name}: {problem}")
     return problems
 
@@ -453,10 +518,12 @@ def main() -> int:
     print("Building portfolio...")
     try:
         content = load_content()
+        site_url = check_site_url(content)
         add_file_flags(content)
         add_page_flags(content)
         prepare_dist()
         pages = render_pages(make_environment(), content)
+        write_robots_and_sitemap(site_url, pages, content["site"]["last_updated"])
     except yaml.YAMLError as error:
         print(f"\nBuild FAILED: a YAML file in content/ is invalid:\n{error}")
         return 1
@@ -466,7 +533,7 @@ def main() -> int:
         print(f"\nBuild FAILED: template error: {error}")
         return 1
 
-    problems = check_pages(pages) + check_dist_files()
+    problems = check_pages(pages) + check_og_image(content) + check_dist_files()
     if problems:
         print(f"\nBuild FAILED: {len(problems)} rule violation(s):")
         for problem in problems:
