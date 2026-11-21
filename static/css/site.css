@@ -1190,6 +1190,186 @@ main:focus {
   margin-bottom: 0;
 }
 
+/* ---------- 20d. Web resume (resume.html) ---------- */
+.resume-wrap {
+  padding-block: var(--space-4) var(--space-6);
+}
+
+.resume-actions {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 860px;
+  margin: 0 auto var(--space-3);
+}
+
+/* The "paper" sheet */
+.paper {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 30px 60px -40px rgb(0 0 0 / 0.6);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 48rem) {
+  .paper {
+    padding: var(--space-8) var(--space-8) var(--space-6);
+  }
+}
+
+.paper-name {
+  margin-bottom: var(--space-1);
+  font-size: var(--step-3);
+}
+
+.paper-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* "·" between contact items, decoration only */
+.paper-contact li + li::before {
+  content: "\00b7";
+  margin-inline: 0.6em;
+  color: var(--muted);
+}
+
+.paper-contact li {
+  overflow-wrap: anywhere;
+}
+
+/* Phones: one item per line, no separators (a wrapped "·" would dangle).
+   `screen` only: the A4 print page is also narrow but keeps one row. */
+@media screen and (max-width: 47.99rem) {
+  .paper-contact {
+    flex-direction: column;
+  }
+
+  .paper-contact li + li::before {
+    content: none;
+  }
+}
+
+.paper-summary {
+  max-width: none;
+  margin-bottom: 0;
+}
+
+.paper-section {
+  margin-top: var(--space-4);
+}
+
+/* Section heading: mono eyebrow + thin accent rule filling the line */
+.paper-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.paper-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.r-item + .r-item {
+  margin-top: var(--space-2);
+}
+
+/* Title on the left, date on the right (wraps below on narrow screens) */
+.r-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 var(--space-2);
+}
+
+.r-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+}
+
+.r-title a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.r-title a:hover {
+  color: var(--accent);
+}
+
+.r-when {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+.r-meta {
+  margin: 0.1rem 0 0;
+  color: var(--muted);
+  max-width: none;
+}
+
+.r-bullets {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.r-bullets li {
+  max-width: none;
+}
+
+.r-bullets li + li {
+  margin-top: 0.3rem;
+}
+
+.r-skills {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem var(--space-2);
+  margin: 0;
+}
+
+.r-skills dt {
+  font-weight: 650;
+}
+
+.r-skills dd {
+  margin: 0;
+}
+
+.paper-version {
+  margin: var(--space-4) 0 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  text-align: right;
+}
+
 /* Reading progress bar: hidden unless the browser supports scroll timelines
    and the visitor allows motion (see §21). */
 .reading-progress {
@@ -1331,5 +1511,147 @@ main:focus {
       color var(--duration) var(--ease-out),
       fill var(--duration) var(--ease-out),
       stroke var(--duration) var(--ease-out);
+  }
+}
+
+/* ---------- 22. Print (used by resume.html "Save as PDF") ----------
+   A4, black on white, only the resume sheet. Links keep working in the
+   saved PDF but look like plain text. Placed last so it beats both themes
+   (:root[data-theme] has the same specificity as the theme rules). */
+@media print {
+  @page {
+    size: A4;
+    margin: 11mm 13mm;
+  }
+
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --border: #cccccc;
+    --text: #000000;
+    --muted: #333333;
+    --accent: #000000;
+  }
+
+  html {
+    font-size: 9pt;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .skip-link,
+  .reading-progress,
+  .site-header,
+  .site-footer,
+  .resume-actions,
+  .hero-canvas,
+  .theme-toggle {
+    display: none !important;
+  }
+
+  main,
+  .resume-wrap {
+    padding: 0;
+  }
+
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .paper {
+    max-width: none;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 1rem;
+    line-height: 1.32;
+  }
+
+  .paper-name {
+    margin-bottom: 0.15rem;
+    font-size: 1.9rem;
+  }
+
+  .paper-contact {
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .paper-section {
+    margin-top: 0.6rem;
+  }
+
+  .paper-heading {
+    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+  }
+
+  .r-item + .r-item {
+    margin-top: 0.35rem;
+  }
+
+  .r-meta {
+    margin-top: 0;
+  }
+
+  .r-bullets {
+    margin-top: 0.1rem;
+  }
+
+  .r-bullets li + li {
+    margin-top: 0;
+  }
+
+  .r-skills {
+    gap: 0.15rem 1rem;
+  }
+
+  .paper-version {
+    margin-top: 0.4rem;
+  }
+
+  /* Class XII and Class X side by side to save space on paper */
+  .r-education {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5rem;
+  }
+
+  .r-education .paper-heading,
+  .r-education .r-item:first-of-type {
+    grid-column: 1 / -1;
+  }
+
+  .r-education .r-item + .r-item {
+    margin-top: 0.35rem;
+  }
+
+  .r-item,
+  .r-skills {
+    break-inside: avoid;
+  }
+
+  .paper-heading {
+    break-after: avoid;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  /* No scroll-driven or other animation on paper */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

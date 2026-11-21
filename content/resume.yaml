@@ -1,0 +1,67 @@
+# Web resume (resume.html). Word for word from Resume v1 (21 Nov 2026), except:
+# no phone number on the web (site rule). Update this file whenever the resume changes.
+version: "v1 · Nov 2026"
+name: "Aarif Mushtaq"
+contact:
+  location: "Kashmir, India"
+  email: "aarifmushtaq542@gmail.com"
+  linkedin: "https://www.linkedin.com/in/aarif-mushtaq-167708398"
+  github: "https://github.com/aarif-ai"
+
+summary: "B.Tech student in Artificial Intelligence & Data Science doing faculty-supervised research on open-weight LLM agent teams. Builds tested, database-backed Python web applications; looking for AI/ML and software engineering internships."
+
+education:
+  - school: "University of Kashmir, North Campus"
+    detail: "B.Tech, Artificial Intelligence & Data Science"
+    when: "2025 – 2029"
+    lines:
+      - "SGPA: 8.65/10 (Semester 1)"
+      - "Relevant coursework: Programming in C, OOP using Python, Database Management Systems (MySQL), Statistical Foundations of Data Science, Discrete Mathematics, Linear Algebra & Probability, Introduction to AI"
+  - school: "Class XII (Science)"
+    detail: "Public School English Medium, Bijbehara (JKBOSE)"
+    when: ""
+    lines: ["94.0%"]
+  - school: "Class X"
+    detail: "Public School English Medium, Bijbehara (JKBOSE)"
+    when: ""
+    lines: ["CGPA 8.2/10"]
+
+research:
+  - title: "Same Model or Mixed Models? Error Correlation in Open-Weight LLM Agent Teams"
+    meta: "Faculty-supervised B.Tech research"
+    when: "2026 – Present"
+    bullets:
+      - "Designing a controlled study of whether mixed-model three-agent LLM teams make fewer correlated errors than same-model teams: 6 open-weight 7–9B large language models (Qwen, Llama, Gemma, Mistral, OLMo), 56 team configurations, 4 reasoning benchmarks (GSM8K, ARC-Challenge, MMLU-Pro, StrategyQA)."
+      - "Built a reproducible evaluation pipeline in Python: vLLM offline batched inference on an NVIDIA A30 GPU with pinned model revisions, 500 frozen question IDs per benchmark (calibration/evaluation split) with SHA-256 data manifests, versioned prompts, and a pytest-tested answer parser and scorer."
+      - "Smoke-tested all 6 models and 4 quantized checkpoints; maintain decision, run and literature logs. Parser validation under way before full benchmark runs."
+  - title: "A Concentrated Review on Retrieval-Augmented Generation: Towards Reliable Question Answering over Real-World Educational Documents"
+    meta: "Course research paper, Professional Practice & Digital Skills Lab; defended in viva; follow-up proposal prepared"
+    when: "2026"
+    bullets: []
+
+projects:
+  - title: "CampusHub — Campus Event Management Platform"
+    stack: "Python, Flask, SQLAlchemy, PostgreSQL, pytest, GitHub Actions"
+    link: ""
+    bullets:
+      - "Designed and built a Flask web application that manages the complete event lifecycle (draft, submission, department approval, publishing, attendance, certificates) for 4 user roles, with role-based access control, CSRF protection, password hashing and login throttling."
+      - "Added QR-code attendance using signed tokens and a database UNIQUE constraint that blocks duplicate check-ins during simultaneous scans; generated PDF certificates (ReportLab) with QR-based public verification."
+      - "Structured the code into Flask routes, 25 service modules and SQLAlchemy models; tested it with 351 pytest tests in a GitHub Actions CI pipeline (Ruff + pytest) and managed schema changes with 11 Alembic migrations."
+  - title: "Hostel Management System"
+    stack: "Python, Flask, SQLite, Bootstrap, JavaScript"
+    link: "https://github.com/aarif-ai/Hostel-Management-System"
+    bullets:
+      - "Built a Flask web application to manage hostel operations across 7 modules: students, room allocation, daily attendance, fees, complaints, visitors and food-wastage tracking."
+      - "Automated attendance-percentage calculation and monthly food-wastage fines; secured admin login with hashed passwords and session-based authentication."
+
+skills:
+  proficient: "Python, C, SQL · SQLite, MySQL · NumPy, Pandas, Matplotlib · Git, GitHub · Object-Oriented Programming"
+  familiar: "C++, JavaScript, HTML/CSS, Bootstrap · Flask, Jinja2, SQLAlchemy, Alembic, PostgreSQL · pytest, GitHub Actions (CI) · Jupyter, Exploratory Data Analysis · vLLM, LLM inference and evaluation, prompt design, RAG"
+
+leadership:
+  - title: "Founder & Student Coordinator, VERITAS Language Club"
+    meta: "University of Kashmir, North Campus"
+    when: "Sep 2026"
+    bullets:
+      - "Started a language club with support from the Campus Director and a faculty advisor; organised 2 events with 100+ participants each, including the inaugural debate “VERITAS: The First Voice”, judged by department coordinators."
+      - "Planned each event: schedules, debate rules, judging sheets, official letters and certificates."

@@ -9,7 +9,7 @@ next:
   - "A RAG and AI-agents course, and one serious RAG/agent project."
   - "Rebuilding the core modules of my own projects without AI."
   - "Redeploying CampusHub with a live demo."
-# Table labels for the log (approved by Aarif, 21 Nov 2026).
+# Table labels for the log.
 log_caption: "Learning log"
 log_columns:
   date: "Date"

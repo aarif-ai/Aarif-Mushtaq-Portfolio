@@ -1,0 +1,129 @@
+{#
+  Web resume, rendered word for word from content/resume.yaml.
+  Section headings reuse the header nav labels (Research, Projects, Skills,
+  Leadership) and site.ui.education; skill levels reuse skills.yaml labels.
+  - Project titles link to their case study when one exists (matched by the
+    case study's title appearing in the resume title).
+  - Research titles link to the Research section on the home page.
+  - Empty `when`, `link` or `bullets` render nothing.
+  The print stylesheet (site.css, @media print) turns this into an A4 page.
+#}
+{% extends "base.html" %}
+
+{% set nav_sections = site.nav | map(attribute="id") | list %}
+{% set is_home = false %}
+
+{% block title %}{{ site.link_labels.resume }} · {{ resume.name }}{% endblock %}
+
+{% block scripts %}
+  <script src="/js/resume-print.js" defer></script>
+{% endblock %}
+
+{% block content %}
+{# id → label lookup for the header nav labels, e.g. nav_label.research #}
+{% set nav_label = {} %}
+{% for item in site.nav %}{% set _ = nav_label.update({item.id: item.label}) %}{% endfor %}
+<div class="container resume-wrap">
+  <p class="resume-actions">
+    {# Hidden until resume-print.js runs: without JS it couldn't work. #}
+    <button type="button" class="button button-primary print-button" hidden>{{ site.ui.save_pdf }}</button>
+  </p>
+
+  <article class="paper" aria-labelledby="resume-name">
+    <header class="paper-head">
+      <h1 id="resume-name" class="paper-name">{{ resume.name }}</h1>
+      <ul class="paper-contact">
+        <li>{{ resume.contact.location }}</li>
+        <li><a href="mailto:{{ resume.contact.email }}">{{ resume.contact.email }}</a></li>
+        <li><a href="{{ resume.contact.linkedin }}">{{ site.link_labels.linkedin }}</a></li>
+        <li><a href="{{ resume.contact.github }}">{{ site.link_labels.github }}</a></li>
+      </ul>
+    </header>
+
+    <p class="paper-summary">{{ resume.summary }}</p>
+
+    <section class="paper-section r-education" aria-labelledby="r-education">
+      <h2 id="r-education" class="paper-heading">{{ site.ui.education }}</h2>
+      {% for item in resume.education %}
+      <div class="r-item">
+        <div class="r-row">
+          <h3 class="r-title">{{ item.school }}</h3>
+          {% if item.when %}<p class="r-when">{{ item.when }}</p>{% endif %}
+        </div>
+        <p class="r-meta">{{ item.detail }}</p>
+        {% if item.lines %}
+        <ul class="r-bullets">
+          {% for line in item.lines %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="paper-section" aria-labelledby="r-research">
+      <h2 id="r-research" class="paper-heading">{{ nav_label.research }}</h2>
+      {% for item in resume.research %}
+      <div class="r-item">
+        <div class="r-row">
+          <h3 class="r-title"><a href="/#research">{{ item.title }}</a></h3>
+          {% if item.when %}<p class="r-when">{{ item.when }}</p>{% endif %}
+        </div>
+        <p class="r-meta">{{ item.meta }}</p>
+        {% if item.bullets %}
+        <ul class="r-bullets">
+          {% for line in item.bullets %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="paper-section" aria-labelledby="r-projects">
+      <h2 id="r-projects" class="paper-heading">{{ nav_label.projects }}</h2>
+      {% for item in resume.projects %}
+      {% set case = projects["items"] | selectattr("title", "in", item.title) | first %}
+      <div class="r-item">
+        <div class="r-row">
+          <h3 class="r-title">
+            {% if case is defined and case.has_page %}<a href="{{ case.page }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+          </h3>
+          {% if item.link %}<p class="r-when"><a href="{{ item.link }}">{{ site.link_labels.github }}</a></p>{% endif %}
+        </div>
+        <p class="r-meta">{{ item.stack }}</p>
+        <ul class="r-bullets">
+          {% for line in item.bullets %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="paper-section" aria-labelledby="r-skills">
+      <h2 id="r-skills" class="paper-heading">{{ nav_label.skills }}</h2>
+      <dl class="r-skills">
+        <dt>{{ skills.proficient.label }}</dt>
+        <dd>{{ resume.skills.proficient }}</dd>
+        <dt>{{ skills.familiar.label }}</dt>
+        <dd>{{ resume.skills.familiar }}</dd>
+      </dl>
+    </section>
+
+    <section class="paper-section" aria-labelledby="r-leadership">
+      <h2 id="r-leadership" class="paper-heading">{{ nav_label.leadership }}</h2>
+      {% for item in resume.leadership %}
+      <div class="r-item">
+        <div class="r-row">
+          <h3 class="r-title">{{ item.title }}</h3>
+          {% if item.when %}<p class="r-when">{{ item.when }}</p>{% endif %}
+        </div>
+        <p class="r-meta">{{ item.meta }}</p>
+        <ul class="r-bullets">
+          {% for line in item.bullets %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </section>
+
+    <p class="paper-version">{{ resume.version }}</p>
+  </article>
+</div>
+{% endblock %}

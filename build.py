@@ -62,6 +62,12 @@ PHONE_PATTERN = re.compile(
     r"|(?<![\w/.-])\(?\d{3}\)?[\s-]\d{3}[\s-]\d{4}(?![\w/.-])"
 )
 
+# Files no page may ever link to, with the reason (checked in every href/src).
+FORBIDDEN_FILES: dict[str, str] = {
+    "Aarif_Mushtaq_Resume_v1.pdf": "the old resume PDF contains a phone number; "
+                                   "link to /resume.html instead",
+}
+
 # Performance budget from CLAUDE.md §6, in kilobytes (uncompressed).
 BUDGET_KB: dict[str, int] = {"CSS": 40, "JS": 30, "Fonts": 150}
 FONT_SUFFIXES = {".woff2", ".woff", ".ttf", ".otf"}
@@ -237,7 +243,7 @@ def write_page(env: Environment, template_name: str, out_name: str,
 
 
 def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
-    """Render index.html, one page per project, and 404.html.
+    """Render index.html, one page per project, resume.html and 404.html.
 
     Also renders css/view-transitions.css, which gives each project title a
     unique transition name (see that template). It is a stylesheet, not a
@@ -255,6 +261,9 @@ def render_pages(env: Environment, content: dict[str, Any]) -> list[Path]:
                                     f"{project['slug']}.html", context))
     else:
         print("  note: templates/case_study.html not created yet - skipped")
+
+    if (TEMPLATES_DIR / "resume.html").exists():
+        pages.append(write_page(env, "resume.html", "resume.html", content))
 
     if (TEMPLATES_DIR / "404.html").exists():
         pages.append(write_page(env, "404.html", "404.html", content))
@@ -311,7 +320,8 @@ def check_local_links(page: Path, html: str) -> list[str]:
     """Return a message for every local link or src that doesn't exist.
 
     External links (https:, mailto:) are not checked. "#section" links must
-    point to an id on the same page. An empty href is always an error.
+    point to an id on the same page. An empty href is always an error, and
+    so is any link to a file in FORBIDDEN_FILES.
     """
     collector = LinkCollector()
     collector.feed(html)
@@ -321,6 +331,9 @@ def check_local_links(page: Path, html: str) -> list[str]:
         if link.strip() == "":
             problems.append("empty href/src")
             continue
+        for name, reason in FORBIDDEN_FILES.items():
+            if name in link:
+                problems.append(f"links to '{name}' ({reason})")
         parts = urlsplit(link)
         if parts.scheme or parts.netloc:      # https://..., mailto:..., //cdn
             continue

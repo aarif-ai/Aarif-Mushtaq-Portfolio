@@ -11,11 +11,13 @@ person:
   photo: "/img/aarif.webp"          # 440x440 square, ~37 KB
   photo_alt: "Aarif Mushtaq"
 
-# Interface labels (approved by Aarif, 21 Nov 2026).
+# Interface labels.
 ui:
   skip_link: "Skip to main content"
   theme_toggle: "Light theme"
   last_updated: "Last updated"
+  education: "Education"
+  save_pdf: "Save as PDF"
 
 # Header section links. A link appears only once its section exists on the page.
 nav:
@@ -42,14 +44,14 @@ hero:
   availability: "Looking for AI/ML and software engineering internships."
 
 links:
-  resume: "/docs/Aarif_Mushtaq_Resume_v1.pdf"
+  resume: "/resume.html"
   github: "https://github.com/aarif-ai"
   linkedin: "https://www.linkedin.com/in/aarif-mushtaq-167708398"
   email: "mailto:aarifmushtaq542@gmail.com"
 
-# Button text for the links above (wording from Aarif, 21 Nov 2026).
+# Button text for the links above.
 link_labels:
-  resume: "Resume (PDF)"
+  resume: "Resume"
   github: "GitHub"
   linkedin: "LinkedIn"
   email: "Email"
