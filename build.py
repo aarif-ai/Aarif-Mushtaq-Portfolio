@@ -18,6 +18,7 @@ import re
 from datetime import datetime
 import shutil
 import sys
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -442,12 +443,17 @@ def check_dist_files() -> list[str]:
 
 
 def check_head_tags(html: str) -> list[str]:
-    """Every page needs a <title>, a meta description and an og:image."""
+    """Every page needs a <title>, a meta description (≤ 160 characters,
+    so search results don't cut it off) and an og:image."""
     problems: list[str] = []
     if not re.search(r"<title>\s*\S[^<]*</title>", html):
         problems.append("missing or empty <title>")
-    if not re.search(r'<meta name="description" content="[^"]+"', html):
+    description = re.search(r'<meta name="description" content="([^"]+)"', html)
+    if not description:
         problems.append("missing meta description")
+    elif len(unescape(description.group(1))) > 160:
+        problems.append(f"meta description is {len(unescape(description.group(1)))} "
+                        "characters; keep it at 160 or fewer")
     if not re.search(r'<meta property="og:image" content="https://[^"]+"', html):
         problems.append("missing og:image (absolute https URL)")
     return problems
