@@ -10,6 +10,7 @@ Output:
     static/img/aarif-64.webp      header avatar, 64×64 (shown at 32px, sharp on 2× screens)
     static/favicon-32.png         browser tab icon, round, transparent corners
     static/favicon-16.png         small tab icon, round, transparent corners
+    static/favicon.ico            the 16px and 32px icons in one file (classic /favicon.ico)
     static/apple-touch-icon.png   180×180, square, no transparency (iOS rounds it itself)
 
 Rerun it whenever the photo changes. If the new photo is framed differently,
@@ -75,8 +76,14 @@ def main() -> None:
     print("Wrote:")
     save(resized(face, 64), ROOT / "static" / "img" / "aarif-64.webp", quality=82, method=6)
     favicon_32 = round_icon(face, 32)
+    favicon_16 = round_icon(face, 16)
     save(favicon_32, ROOT / "static" / "favicon-32.png", optimize=True)
-    save(round_icon(face, 16), ROOT / "static" / "favicon-16.png", optimize=True)
+    save(favicon_16, ROOT / "static" / "favicon-16.png", optimize=True)
+    # One .ico holding both sizes, for browsers and tools that ask for
+    # /favicon.ico directly. append_images supplies the exact 16px drawing
+    # instead of letting Pillow shrink the 32px one.
+    save(favicon_32, ROOT / "static" / "favicon.ico",
+         format="ICO", sizes=[(16, 16), (32, 32)], append_images=[favicon_16])
     # 180×180 photo as PNG: reduced to 256 colours, which keeps it small
     # without visible banding at this size.
     apple = resized(face, 180).quantize(colors=256, method=Image.Quantize.MEDIANCUT)

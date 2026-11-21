@@ -19,16 +19,23 @@ This is a long-lived site: Aarif updates it every few months (next: March 2027) 
 - `build.py` enforces the checkable parts of these rules (see §4) and must fail the build on a violation.
 
 ## 2. Stack
-- **Python 3.11 + Jinja2 + PyYAML** → static HTML. `build.py` renders `templates/` with `content/*.yaml` into `dist/` and copies `static/` into `dist/`.
+- **Python 3.11 + Jinja2 + PyYAML** → static HTML. `build.py` renders `templates/` with `content/*.yaml` into `dist/` and copies `static/` into `dist/` (except `originals/` folders and `diagrams/`, which are inlined into pages).
 - Front end: hand-written HTML, CSS and vanilla JavaScript. No React, Vue, Tailwind, jQuery, GSAP or any CDN. No npm.
 - Fonts: self-hosted WOFF2 in `static/fonts/` — Inter (variable) for text, JetBrains Mono for labels/code. Latin subset only, `font-display: swap`, keep the font licence files. Preload only the body font.
 - `dist/` is generated: never edit it by hand, never commit it.
 
 ```
-content/      site.yaml research.yaml projects.yaml skills.yaml now.yaml leadership.yaml
-templates/    base.html  index.html  case_study.html  404.html  partials/*.html
-static/       css/  js/  fonts/  img/  diagrams/  docs/  favicon.svg
-build.py  requirements.txt  netlify.toml  README.md  CLAUDE.md  BUILD_STEPS.md
+content/      site.yaml research.yaml projects.yaml skills.yaml now.yaml leadership.yaml resume.yaml
+templates/    base.html  index.html  case_study.html  resume.html  404.html
+              view-transitions.css  (rendered into dist/css/)
+              og.html               (dev-only: drawn into static/img/og.png, never published)
+              partials/*.html       (incl. macros.html)
+static/       css/  js/  fonts/  diagrams/ (inlined, not copied)
+              img/   (originals/ git-ignored)     docs/  (originals/ git-ignored)
+              favicon.ico  favicon-16.png  favicon-32.png  apple-touch-icon.png
+scripts/      make_public_resume.py  make_icons.py  make_og.py   (maintenance; need requirements-dev.txt)
+build.py  requirements.txt  requirements-dev.txt  netlify.toml  .gitattributes
+README.md  CLAUDE.md  BUILD_STEPS.md
 dist/         ← generated output (git-ignored); Netlify publishes this
 ```
 Local run: `python build.py` then `python -m http.server 8000 --directory dist`.
@@ -50,9 +57,12 @@ Allowed effects — and only these unless Aarif approves more:
 6. **Page transitions** between home and case studies: cross-document View Transitions (`@view-transition { navigation: auto; }`) with shared names on project titles.
 7. **Diagram draw-in**: SVG strokes animate with `stroke-dashoffset` on a view timeline.
 8. **Theme toggle**: smooth colour transition; choice saved in `localStorage` (wrapped in try/catch).
+9. **Hover lift** (mouse only, approved later): cards rise 3px (via `translate`, so it never fights the scroll reveal's `transform`), buttons 1px; 150–200ms.
+10. **`<details>` fade** (approved later): "Show full details" content fades and drops in on open (300ms) and the chevron turns; closing is instant.
+11. **Mobile menu** (approved later): the Menu button opens and closes the link panel (also closes on Escape and on choosing a link). It appears instantly; any future open/close animation must follow the rules below.
 Rules for every effect:
 - Animate only `transform` and `opacity` (plus `stroke-dashoffset` for diagrams). 150–600ms, ease-out. Nothing loops except the hero canvas.
-- Everything is wrapped in `@media (prefers-reduced-motion: no-preference)` or checked with `matchMedia` in JS. The site must look complete and polished with all motion off.
+- Everything (items 1–11) is wrapped in `@media (prefers-reduced-motion: no-preference)` or checked with `matchMedia` in JS. The site must look complete and polished with all motion off.
 - No scroll-jacking, no custom cursor, no autoplay video, no parallax on text.
 
 ## 5. Accessibility (WCAG 2.1 AA)
@@ -60,7 +70,7 @@ Semantic landmarks, `lang="en"`, one `<h1>` per page, ordered headings, skip lin
 
 ## 6. Performance budget (mobile)
 - Lighthouse ≥ 95 in Performance, Accessibility, Best Practices, SEO.
-- JS ≤ 30 KB total (uncompressed), CSS ≤ 40 KB, fonts ≤ 150 KB total, each image ≤ 150 KB `.webp` with `width`/`height`, `loading="lazy"` below the fold.
+- JS ≤ 30 KB total (uncompressed), CSS ≤ 40 KB, fonts ≤ 150 KB total, each image ≤ 150 KB `.webp` with `width`/`height`, `loading="lazy"` below the fold. PNG is allowed only for `og.png` (link previews) and the favicons/apple-touch icon (`.ico`/`.png`), where `.webp` isn't widely supported.
 - No layout shift (CLS < 0.05). Scripts loaded with `defer`. The only blocking script allowed is a tiny theme script in `<head>` to avoid a colour flash.
 - Content Security Policy in `netlify.toml` allows only `'self'` — so no inline `<script>` or inline `style=""` attributes; put everything in files.
 

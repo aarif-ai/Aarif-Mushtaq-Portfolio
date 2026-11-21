@@ -475,6 +475,49 @@ def check_og_image(content: dict[str, Any]) -> list[str]:
     return []
 
 
+def diagram_labels(svg: str) -> list[str]:
+    """The text of every box label (<text> element) in an SVG diagram.
+
+    A label split over two lines with <tspan>s ("Alembic" / "migrations")
+    is joined with a space ("Alembic migrations").
+    """
+    labels = []
+    for match in re.finditer(r"<text\b[^>]*>(.*?)</text>", svg, re.DOTALL):
+        inner = re.sub(r"<[^>]+>", " ", match.group(1))
+        labels.append(" ".join(unescape(inner).split()))
+    return labels
+
+
+def check_diagram_labels(content: dict[str, Any]) -> list[str]:
+    """Every diagram label must appear, word for word, in its item's YAML.
+
+    Sources: a research diagram's `boxes`; a project diagram's
+    `architecture.text` and `problem` (the problem holds the event lifecycle).
+    This keeps hand-drawn SVGs from saying anything the YAML doesn't.
+    """
+    checks = []  # (diagram, the YAML text its labels must come from, where)
+    for item in content["research"]["items"]:
+        if "diagram" in item:
+            checks.append((item["diagram"], " ".join(item["diagram"].get("boxes", [])),
+                           f"research '{item['slug']}' diagram.boxes"))
+    for project in content["projects"]["items"]:
+        source = project["architecture"]["text"] + " " + project["problem"]
+        for diagram in project["architecture"]["diagrams"]:
+            checks.append((diagram, source,
+                           f"project '{project['slug']}' architecture.text / problem"))
+
+    problems: list[str] = []
+    for diagram, source, where in checks:
+        if "svg" not in diagram:
+            continue                      # diagram file not made yet
+        source = " ".join(source.split())
+        for label in diagram_labels(str(diagram["svg"])):
+            if label not in source:
+                problems.append(f"{diagram['file'].lstrip('/')}: label '{label}' "
+                                f"is not in the YAML ({where})")
+    return problems
+
+
 def check_pages(pages: list[Path]) -> list[str]:
     """Run every check on every page; return all problems with page names."""
     problems: list[str] = []
@@ -539,7 +582,8 @@ def main() -> int:
         print(f"\nBuild FAILED: template error: {error}")
         return 1
 
-    problems = check_pages(pages) + check_og_image(content) + check_dist_files()
+    problems = (check_pages(pages) + check_og_image(content)
+                + check_diagram_labels(content) + check_dist_files())
     if problems:
         print(f"\nBuild FAILED: {len(problems)} rule violation(s):")
         for problem in problems:

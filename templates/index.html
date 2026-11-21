@@ -22,7 +22,8 @@
 
   <div class="container hero-inner">
     {# Phones/tablets: portrait on top. From 64rem: text left, portrait right (CSS grid). #}
-    <img class="hero-photo" src="{{ site.person.photo }}" alt="{{ site.person.photo_alt }}"
+    {# alt="": decorative here, the name is the heading right next to it #}
+    <img class="hero-photo" src="{{ site.person.photo }}" alt=""
          width="440" height="440" fetchpriority="high" decoding="async">
     <div class="hero-text">
       <p class="eyebrow">{{ site.hero.eyebrow }}</p>
