@@ -19,7 +19,7 @@ This is a long-lived site: Aarif updates it every few months (next: March 2027) 
 - `build.py` enforces the checkable parts of these rules (see §4) and must fail the build on a violation.
 
 ## 2. Stack
-- **Python 3.12 + Jinja2 + PyYAML** → static HTML. `build.py` renders `templates/` with `content/*.yaml` into `dist/` and copies `static/` into `dist/`.
+- **Python 3.11 + Jinja2 + PyYAML** → static HTML. `build.py` renders `templates/` with `content/*.yaml` into `dist/` and copies `static/` into `dist/`.
 - Front end: hand-written HTML, CSS and vanilla JavaScript. No React, Vue, Tailwind, jQuery, GSAP or any CDN. No npm.
 - Fonts: self-hosted WOFF2 in `static/fonts/` — Inter (variable) for text, JetBrains Mono for labels/code. Latin subset only, `font-display: swap`, keep the font licence files. Preload only the body font.
 - `dist/` is generated: never edit it by hand, never commit it.

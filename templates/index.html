@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id="hero" aria-labelledby="hero-name">
+  <p>{{ site.hero.eyebrow }}</p>
+  <h1 id="hero-name">{{ site.person.name }}</h1>
+  <p>{{ site.hero.positioning }}</p>
+  <p>{{ site.hero.availability }}</p>
+</section>
+{% endblock %}
