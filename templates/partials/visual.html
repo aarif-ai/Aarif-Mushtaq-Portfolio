@@ -1,0 +1,19 @@
+{#
+  One diagram or figure (`visual` must be set by the includer, and it must
+  exist: build.py set visual.exists).
+  - .svg diagrams are placed inline: they follow the theme colours and
+    draw themselves in. Their accessible name is their <title>, which
+    build.py has checked is exactly the YAML alt text.
+  - other images (.webp) are a normal lazy-loaded <img>.
+#}
+{% if visual.svg is defined %}
+<figure class="diagram">
+  {{ visual.svg }}
+</figure>
+{% else %}
+<figure class="card-figure">
+  <img src="{{ visual.file }}" alt="{{ visual.alt }}"
+       width="{{ visual.width }}" height="{{ visual.height }}"
+       loading="lazy" decoding="async">
+</figure>
+{% endif %}

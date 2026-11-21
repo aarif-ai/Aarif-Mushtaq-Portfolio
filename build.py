@@ -120,12 +120,40 @@ def image_size(path: Path) -> tuple[int, int]:
                      "(only .webp and .svg are supported)")
 
 
+def load_svg(path: Path, alt: str) -> Markup:
+    """Read a diagram SVG so it can be placed directly inside the page.
+
+    Inline SVG (not <img>) is what lets the diagram use the site's colour
+    tokens (light/dark theme) and the CSS draw-in animation. Because the
+    file becomes part of the page, it is checked first:
+      - no <script>, <style>, style="" or on...="" attributes (the Content
+        Security Policy would block them, and they don't belong in a diagram)
+      - its <title> must be exactly the `alt` text from the YAML, so the
+        YAML stays the one source for what the diagram says.
+    """
+    text = path.read_text(encoding="utf-8")
+    text = re.sub(r"<\?xml[^>]*\?>\s*", "", text)   # drop the XML header line
+
+    forbidden = re.search(r"<script|<style|\sstyle=|\son\w+=", text, re.IGNORECASE)
+    if forbidden:
+        raise SystemExit(f"Build failed: {path.name} contains "
+                         f"'{forbidden.group(0).strip()}', which isn't allowed")
+
+    title = re.search(r"<title[^>]*>(.*?)</title>", text, re.DOTALL)
+    if not title or title.group(1).strip() != str(escape(alt)):
+        raise SystemExit(f"Build failed: the <title> of {path.name} must be "
+                         f"exactly its alt text from the YAML:\n  {alt}")
+    return Markup(text)
+
+
 def add_file_flags(data: Any) -> None:
     """Mark every YAML entry that points at a file with whether it exists.
 
     Any dictionary with a `file` key (diagrams, figures) gets:
       exists: True/False  - is the file in static/ right now?
       width, height       - its size, only when it exists
+      svg                 - for .svg files: the checked file content, to be
+                            placed inline (see load_svg)
     Templates render the image only `if item.exists`, so a diagram or figure
     that hasn't been made yet simply doesn't appear (no broken image).
     """
@@ -138,6 +166,8 @@ def add_file_flags(data: Any) -> None:
             data["exists"] = path.is_file()
             if data["exists"]:
                 data["width"], data["height"] = image_size(path)
+                if path.suffix == ".svg":
+                    data["svg"] = load_svg(path, data["alt"])
         for value in data.values():
             add_file_flags(value)
 

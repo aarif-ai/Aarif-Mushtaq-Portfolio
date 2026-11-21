@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 384" width="300" height="384" role="img" aria-labelledby="chl-title chl-desc" focusable="false">
+  <title id="chl-title">Event lifecycle: Draft, Submitted, then Approved or Rejected, Published, Completed.</title>
+  <desc id="chl-desc">Draft → Submitted → Approved/Rejected → Published → Completed</desc>
+
+  <!-- Colours come from site.css (.diagram ...). The attributes below are
+       only a neutral fallback if this file is opened on its own.
+       States are word for word from projects.yaml (CampusHub problem). -->
+
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-draw" x="10" y="8"  width="280" height="48" rx="24" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="88" width="280" height="48" rx="24" pathLength="1"/>
+    <!-- Decision: two possible outcomes side by side -->
+    <rect class="d-box d-box-accent d-draw" x="10"  y="168" width="130" height="48" rx="24" pathLength="1"/>
+    <rect class="d-box d-draw" x="160" y="168" width="130" height="48" rx="24" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="248" width="280" height="48" rx="24" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="328" width="280" height="48" rx="24" pathLength="1"/>
+  </g>
+
+  <g class="d-arrows" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Draft → Submitted -->
+    <path class="d-arrow d-draw" d="M150 62 V82 M144 75 L150 82 L156 75" pathLength="1"/>
+    <!-- Submitted → Approved (left) or Rejected (right) -->
+    <path class="d-arrow d-draw" d="M150 142 V150 H75 V162 M69 155 L75 162 L81 155" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 150 H225 V162 M219 155 L225 162 L231 155" pathLength="1"/>
+    <!-- Approved → Published → Completed -->
+    <path class="d-arrow d-draw" d="M75 222 V242 M69 235 L75 242 L81 235" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 302 V322 M144 315 L150 322 L156 315" pathLength="1"/>
+  </g>
+
+  <g class="d-labels" fill="#7d8a99" font-size="15" text-anchor="middle">
+    <text class="d-text" x="150" y="37">Draft</text>
+    <text class="d-text" x="150" y="117">Submitted</text>
+    <text class="d-text" x="75"  y="197">Approved</text>
+    <text class="d-text" x="225" y="197">Rejected</text>
+    <text class="d-text" x="150" y="277">Published</text>
+    <text class="d-text" x="150" y="357">Completed</text>
+  </g>
+</svg>

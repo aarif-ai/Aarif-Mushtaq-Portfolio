@@ -1105,14 +1105,56 @@ main:focus {
   font-size: var(--step-2);
 }
 
-.case-figure {
-  margin: var(--space-4) 0 0;
+/* ---------- 20c. Diagrams (inline SVG, theme-aware) ---------- */
+/* Diagrams are drawn ~300 units wide; capping the width keeps their
+   15-unit labels between ~14px (phones) and ~18px (desktop). */
+.diagram {
+  max-width: 22rem;
+  margin: var(--space-4) auto 0;
 }
 
-.case-figure img {
+.diagram svg {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.diagram .d-box {
+  fill: var(--bg);
+  stroke: var(--border-strong);
+}
+
+.diagram .d-box-accent {
+  stroke: var(--accent);
+}
+
+/* Supporting tools beside the main path: quieter border */
+.diagram .d-box-side {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-opacity: 0.7;
+}
+
+.diagram .d-box-pending {
+  fill: none;
+  stroke: var(--muted);
+}
+
+.diagram .d-arrow {
+  stroke: var(--accent);
+}
+
+.diagram .d-arrow-pending {
+  stroke: var(--muted);
+}
+
+.diagram .d-text {
+  fill: var(--text);
+  font-family: var(--font-sans);
+}
+
+.diagram .d-text-muted {
+  fill: var(--muted);
 }
 
 /* Decision cards */
@@ -1162,6 +1204,15 @@ main:focus {
   }
 }
 
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
 @keyframes progress {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -1179,6 +1230,26 @@ main:focus {
       animation: reveal linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 160px;
+    }
+
+    /* Diagram draw-in (CLAUDE.md §4 item 7): each stroke has
+       pathLength="1", so a dash of length 1 offset by 1 hides it, and
+       moving the offset to 0 draws it. Each shape follows its own view
+       timeline, so the diagram draws top to bottom as you scroll.
+       Labels and the dashed "not run yet" parts fade in instead. */
+    .diagram .d-draw {
+      stroke-dasharray: 1;
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+
+    .diagram .d-text,
+    .diagram .d-box-pending,
+    .diagram .d-arrow-pending {
+      animation: fade-in linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
     }
 
     /* Reading progress bar: grows with how far the page is scrolled */

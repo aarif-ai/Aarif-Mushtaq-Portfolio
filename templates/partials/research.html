@@ -42,11 +42,7 @@
 
         {# Diagram / figure: only when build.py found the file in static/. #}
         {% for visual in [item.diagram, item.figure] if visual is defined and visual.exists %}
-        <figure class="card-figure">
-          <img src="{{ visual.file }}" alt="{{ visual.alt }}"
-               width="{{ visual.width }}" height="{{ visual.height }}"
-               loading="lazy" decoding="async">
-        </figure>
+        {% include "partials/visual.html" %}
         {% endfor %}
 
         {% set links = item.links %}

@@ -62,12 +62,8 @@
         <h2 id="architecture-title">{{ labels.architecture }}</h2>
         <p>{{ project.architecture.text }}</p>
         {# Diagrams appear only once build.py finds the file (Step 8). #}
-        {% for diagram in project.architecture.diagrams if diagram.exists %}
-        <figure class="case-figure">
-          <img src="{{ diagram.file }}" alt="{{ diagram.alt }}"
-               width="{{ diagram.width }}" height="{{ diagram.height }}"
-               loading="lazy" decoding="async">
-        </figure>
+        {% for visual in project.architecture.diagrams if visual.exists %}
+        {% include "partials/visual.html" %}
         {% endfor %}
       </section>
 

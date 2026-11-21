@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 552" width="300" height="552" role="img" aria-labelledby="cha-title cha-desc" focusable="false">
+  <title id="cha-title">CampusHub architecture: browser to thin Flask routes, to 25 service modules, to SQLAlchemy models, to SQLite or PostgreSQL; side components Alembic, ReportLab, Resend and GitHub Actions CI.</title>
+  <desc id="cha-desc">Browser → Flask routes (kept thin) → 25 service modules → SQLAlchemy models → SQLite (development) / PostgreSQL. Alongside: Alembic migrations, ReportLab (PDF certificates), Resend (email), GitHub Actions CI.</desc>
+
+  <!-- Colours come from site.css (.diagram ...). The attributes below are
+       only a neutral fallback if this file is opened on its own.
+       Labels are word for word from projects.yaml architecture.text. -->
+
+  <!-- Main request path: solid boxes, top to bottom -->
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-draw" x="10" y="8"   width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="88"  width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-box-accent d-draw" x="10" y="168" width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="248" width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="328" width="280" height="48" rx="8" pathLength="1"/>
+  </g>
+
+  <g class="d-arrows" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="d-arrow d-draw" d="M150 62 V82 M144 75 L150 82 L156 75" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 142 V162 M144 155 L150 162 L156 155" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 222 V242 M144 235 L150 242 L156 235" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 302 V322 M144 315 L150 322 L156 315" pathLength="1"/>
+  </g>
+
+  <g class="d-labels" fill="#7d8a99" font-size="15" text-anchor="middle">
+    <text class="d-text" x="150" y="37">Browser</text>
+    <text class="d-text" x="150" y="117">Flask routes (kept thin)</text>
+    <text class="d-text" x="150" y="197">25 service modules</text>
+    <text class="d-text" x="150" y="277">SQLAlchemy models</text>
+    <text class="d-text" x="150" y="357">SQLite (development) / PostgreSQL</text>
+  </g>
+
+  <!-- Alongside: separate tools, no arrows (the YAML doesn't say how each
+       one connects, so the diagram doesn't claim it) -->
+  <text class="d-text d-text-muted" x="10" y="414" font-size="13" fill="#7d8a99">Alongside</text>
+
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-box-side d-draw" x="10"  y="428" width="134" height="52" rx="8" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="156" y="428" width="134" height="52" rx="8" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="10"  y="492" width="134" height="52" rx="8" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="156" y="492" width="134" height="52" rx="8" pathLength="1"/>
+  </g>
+
+  <g class="d-labels" fill="#7d8a99" font-size="13" text-anchor="middle">
+    <text class="d-text" x="77" y="450"><tspan x="77">Alembic</tspan><tspan x="77" dy="17">migrations</tspan></text>
+    <text class="d-text" x="223" y="450"><tspan x="223">ReportLab</tspan><tspan x="223" dy="17">(PDF certificates)</tspan></text>
+    <text class="d-text" x="77" y="514"><tspan x="77">Resend</tspan><tspan x="77" dy="17">(email)</tspan></text>
+    <text class="d-text" x="223" y="514"><tspan x="223">GitHub Actions</tspan><tspan x="223" dy="17">CI</tspan></text>
+  </g>
+</svg>

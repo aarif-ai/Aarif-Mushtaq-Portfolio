@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 392" width="300" height="392" role="img" aria-labelledby="hsa-title hsa-desc" focusable="false">
+  <title id="hsa-title">Hostel Management System architecture: admin browser to a Flask app with 7 modules, to a SQLite database.</title>
+  <desc id="hsa-desc">Admin browser → Flask app (7 modules: students, rooms, attendance, fees, complaints, visitors, food wastage) → SQLite.</desc>
+
+  <!-- Colours come from site.css (.diagram ...). The attributes below are
+       only a neutral fallback if this file is opened on its own.
+       Labels are word for word from projects.yaml architecture.text. -->
+
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-draw" x="10" y="8" width="280" height="48" rx="8" pathLength="1"/>
+    <!-- Flask app: a container holding its 7 modules -->
+    <rect class="d-box d-box-accent d-draw" x="10" y="88" width="280" height="216" rx="10" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="336" width="280" height="48" rx="8" pathLength="1"/>
+  </g>
+
+  <!-- The 7 modules -->
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-box-side d-draw" x="26"  y="128" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="154" y="128" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="26"  y="170" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="154" y="170" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="26"  y="212" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="154" y="212" width="120" height="34" rx="6" pathLength="1"/>
+    <rect class="d-box d-box-side d-draw" x="90"  y="254" width="120" height="34" rx="6" pathLength="1"/>
+  </g>
+
+  <g class="d-arrows" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="d-arrow d-draw" d="M150 62 V82 M144 75 L150 82 L156 75" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 310 V330 M144 323 L150 330 L156 323" pathLength="1"/>
+  </g>
+
+  <g class="d-labels" fill="#7d8a99" font-size="15" text-anchor="middle">
+    <text class="d-text" x="150" y="37">Admin browser</text>
+    <text class="d-text" x="150" y="115">Flask app (7 modules)</text>
+    <text class="d-text" x="150" y="365">SQLite</text>
+  </g>
+
+  <g class="d-labels" fill="#7d8a99" font-size="13" text-anchor="middle">
+    <text class="d-text" x="86"  y="150">students</text>
+    <text class="d-text" x="214" y="150">rooms</text>
+    <text class="d-text" x="86"  y="192">attendance</text>
+    <text class="d-text" x="214" y="192">fees</text>
+    <text class="d-text" x="86"  y="234">complaints</text>
+    <text class="d-text" x="214" y="234">visitors</text>
+    <text class="d-text" x="150" y="276">food wastage</text>
+  </g>
+</svg>

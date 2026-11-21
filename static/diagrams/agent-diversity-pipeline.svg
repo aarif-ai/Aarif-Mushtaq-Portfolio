@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 464" width="300" height="464" role="img" aria-labelledby="adp-title adp-desc" focusable="false">
+  <title id="adp-title">Pipeline: frozen question IDs, versioned prompts, vLLM batched inference across 6 models, answer parser, scorer, and a final team-analysis stage that has not been run yet.</title>
+  <desc id="adp-desc">Frozen question IDs → Versioned prompts → vLLM batched inference (6 models) → Answer parser → Scorer → Team analysis — not run yet</desc>
+
+  <!-- Colours come from site.css (.diagram ...). The attributes below are
+       only a neutral fallback if this file is opened on its own.
+       Narrow on purpose (300 units): at 360px screens the text stays ~14px. -->
+
+  <!-- Stages that exist: solid boxes -->
+  <g class="d-boxes" fill="none" stroke="#7d8a99" stroke-width="1.5">
+    <rect class="d-box d-draw" x="10" y="8"   width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="88"  width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-box-accent d-draw" x="10" y="168" width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="248" width="280" height="48" rx="8" pathLength="1"/>
+    <rect class="d-box d-draw" x="10" y="328" width="280" height="48" rx="8" pathLength="1"/>
+  </g>
+
+  <!-- Stage not run yet: dashed box, muted text -->
+  <rect class="d-box-pending" x="10" y="408" width="280" height="48" rx="8" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-dasharray="6 5"/>
+
+  <!-- Arrows between stages (line + arrow head) -->
+  <g class="d-arrows" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="d-arrow d-draw" d="M150 62 V82 M144 75 L150 82 L156 75" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 142 V162 M144 155 L150 162 L156 155" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 222 V242 M144 235 L150 242 L156 235" pathLength="1"/>
+    <path class="d-arrow d-draw" d="M150 302 V322 M144 315 L150 322 L156 315" pathLength="1"/>
+  </g>
+  <path class="d-arrow-pending" d="M150 382 V402 M144 395 L150 402 L156 395" fill="none" stroke="#7d8a99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 4"/>
+
+  <!-- Labels (word for word from research.yaml diagram.boxes) -->
+  <g class="d-labels" fill="#7d8a99" font-size="15" text-anchor="middle">
+    <text class="d-text" x="150" y="37">Frozen question IDs</text>
+    <text class="d-text" x="150" y="117">Versioned prompts</text>
+    <text class="d-text" x="150" y="197">vLLM batched inference (6 models)</text>
+    <text class="d-text" x="150" y="277">Answer parser</text>
+    <text class="d-text" x="150" y="357">Scorer</text>
+    <text class="d-text d-text-muted" x="150" y="437">Team analysis — not run yet</text>
+  </g>
+</svg>
