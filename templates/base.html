@@ -10,6 +10,7 @@
   {# Blocking on purpose: applies the saved theme before first paint. #}
   <script src="/js/theme-init.js"></script>
   <script src="/js/theme-toggle.js" defer></script>
+  {% block scripts %}{% endblock %}
 </head>
 <body>
   <a class="skip-link" href="#main">{{ site.ui.skip_link }}</a>

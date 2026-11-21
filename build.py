@@ -154,7 +154,8 @@ def prepare_dist() -> None:
     """Delete the old dist/ folder and copy static/ into a fresh one."""
     if DIST_DIR.exists():
         shutil.rmtree(DIST_DIR)
-    shutil.copytree(STATIC_DIR, DIST_DIR)
+    shutil.copytree(STATIC_DIR, DIST_DIR,
+                    ignore=shutil.ignore_patterns("originals"))
 
 
 # ----------------------------------------------------------------- checks

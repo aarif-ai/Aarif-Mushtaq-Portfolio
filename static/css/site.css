@@ -204,7 +204,7 @@ samp {
 
 main {
   display: block;
-  padding-block: var(--space-8);
+  padding-bottom: var(--space-8);
 }
 
 /* <main> is focused by the skip link; it needs no ring of its own */
@@ -367,8 +367,140 @@ main:focus {
 .icon-moon { display: var(--show-moon); }
 .icon-sun { display: var(--show-sun); }
 
-/* ---------- 8. Motion (only when the visitor allows it) ---------- */
+/* ---------- 8. Buttons ---------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;               /* 44px touch target */
+  padding: 0 1.25rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.button:hover {
+  border-color: var(--accent);
+}
+
+.button-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ---------- 9. Hero ---------- */
+.hero {
+  position: relative;
+  isolation: isolate;                /* keeps the canvas behind the text */
+  overflow: hidden;
+  padding-block: var(--space-8) var(--space-12);
+}
+
+/* Network canvas fills the hero and fades out towards the bottom edge */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.hero-canvas.is-ready {
+  opacity: 1;
+}
+
+.hero-inner {
+  display: grid;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+/* Mobile: portrait above the name (visual order only; text comes first
+   in the HTML so screen readers meet the heading first). */
+.hero-photo {
+  order: -1;
+  width: 200px;
+  height: auto;                      /* width/height attributes keep the 1:1 box */
+  border-radius: 50%;
+  background: var(--surface);
+  /* thin accent ring with a small gap in the page colour */
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--accent);
+}
+
+.hero-text h1 {
+  margin-bottom: var(--space-3);
+}
+
+.hero-positioning {
+  font-size: var(--step-1);
+  line-height: 1.45;
+  max-width: 36ch;
+}
+
+.hero-availability {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  color: var(--muted);
+}
+
+/* decorative dot; the sentence itself carries the meaning */
+.hero-availability::before {
+  content: "";
+  flex: none;
+  margin-top: 0.55em;               /* centred on the first line of text */
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Desktop: text on the left, portrait beside it on the right */
+@media (min-width: 48rem) {
+  .hero {
+    padding-block: var(--space-12);
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr auto;
+    gap: var(--space-8);
+  }
+
+  .hero-photo {
+    order: 0;
+  }
+}
+
+/* ---------- 10. Motion (only when the visitor allows it) ---------- */
 @media (prefers-reduced-motion: no-preference) {
+  .hero-canvas {
+    transition: opacity 600ms var(--ease-out);
+  }
+
+  .button {
+    transition: transform 150ms var(--ease-out);
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
   html {
     scroll-behavior: smooth;
   }

@@ -5,11 +5,32 @@
 {% set nav_sections = [] %}
 {% set is_home = true %}
 
+{% block scripts %}
+  <script src="/js/hero-network.js" defer></script>
+{% endblock %}
+
 {% block content %}
-<section id="hero" class="container" aria-labelledby="hero-name">
-  <p class="eyebrow">{{ site.hero.eyebrow }}</p>
-  <h1 id="hero-name">{{ site.person.name }}</h1>
-  <p>{{ site.hero.positioning }}</p>
-  <p>{{ site.hero.availability }}</p>
+<section id="hero" class="hero" aria-labelledby="hero-name">
+  {# Decorative background: drifting nodes joined by faint lines. #}
+  <canvas class="hero-canvas" aria-hidden="true"></canvas>
+
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">{{ site.hero.eyebrow }}</p>
+      <h1 id="hero-name">{{ site.person.name }}</h1>
+      <p class="hero-positioning">{{ site.hero.positioning }}</p>
+      <p class="hero-availability">{{ site.hero.availability }}</p>
+
+      <ul class="hero-actions">
+        <li><a class="button button-primary" href="{{ site.links.resume }}">{{ site.link_labels.resume }}</a></li>
+        <li><a class="button" href="{{ site.links.github }}">{{ site.link_labels.github }}</a></li>
+        <li><a class="button" href="{{ site.links.linkedin }}">{{ site.link_labels.linkedin }}</a></li>
+        <li><a class="button" href="{{ site.links.email }}">{{ site.link_labels.email }}</a></li>
+      </ul>
+    </div>
+
+    <img class="hero-photo" src="{{ site.person.photo }}" alt="{{ site.person.photo_alt }}"
+         width="440" height="440" fetchpriority="high" decoding="async">
+  </div>
 </section>
 {% endblock %}

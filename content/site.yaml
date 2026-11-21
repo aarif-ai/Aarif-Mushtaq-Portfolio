@@ -8,6 +8,8 @@ person:
   years: "2025–2029"
   location: "Kashmir, India"
   email: "aarifmushtaq542@gmail.com"
+  photo: "/img/aarif.webp"          # 440x440 square, ~37 KB
+  photo_alt: "Aarif Mushtaq"
 
 # Interface labels (approved by Aarif, 21 Nov 2026).
 ui:
@@ -43,6 +45,13 @@ links:
   github: "https://github.com/aarif-ai"
   linkedin: "https://www.linkedin.com/in/aarif-mushtaq-167708398"
   email: "mailto:aarifmushtaq542@gmail.com"
+
+# Button text for the links above (wording from Aarif, 21 Nov 2026).
+link_labels:
+  resume: "Resume (PDF)"
+  github: "GitHub"
+  linkedin: "LinkedIn"
+  email: "Email"
 
 # Real, verified numbers only. Shown as count-up stats; the HTML always contains the final value.
 stats:
