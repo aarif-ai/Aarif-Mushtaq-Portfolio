@@ -1,0 +1,22 @@
+{#
+  Journey timeline from site.yaml `timeline`, oldest first.
+  An item with `upcoming: true` is drawn differently: hollow dot and a
+  dashed line (not colour alone), and its text already starts with "Next:".
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "journey") | first).label %}
+
+<section id="journey" class="section" aria-labelledby="journey-title">
+  <div class="container">
+    <h2 id="journey-title" class="section-title">{{ heading }}</h2>
+
+    <ol class="timeline">
+      {% for item in site.timeline %}
+      {% set upcoming = item.upcoming is defined and item.upcoming %}
+      <li class="timeline-item{{ ' timeline-upcoming' if upcoming }} reveal">
+        <p class="timeline-when">{{ item.when }}</p>
+        <p class="timeline-what">{{ item.what }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>

@@ -15,6 +15,7 @@ person:
 ui:
   skip_link: "Skip to main content"
   theme_toggle: "Light theme"
+  last_updated: "Last updated"
 
 # Header section links. A link appears only once its section exists on the page.
 nav:
@@ -90,8 +91,8 @@ timeline:
 
 about:
   - "I'm Aarif, a B.Tech student in AI & Data Science at the University of Kashmir's North Campus (Semester 1 SGPA: 8.65/10)."
-  - "When I take something on, I give it whatever it needs and see it through. That's how a college project became a 351-test application, and how a research question became a 56-team, 4-benchmark study."
-  - "I'm working towards becoming an AI engineer with strong computer science fundamentals — which is why my next three months are DSA, RAG and agents, and rebuilding my own code without AI."
+  - "When I take something on, I give it whatever it needs and see it through. That's how a college project became a 351-test application, and how a research question became a 56-team, 4-benchmark study design."
+  - "I'm working towards becoming an AI engineer with strong computer science fundamentals — which is why, from January 2027, my focus is DSA, RAG and agents, and rebuilding my own code without AI."
   - "Outside engineering, I write. I've completed a semi-autobiographical novella, *The Weight of Water*."
 
 contact:

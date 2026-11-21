@@ -1,0 +1,35 @@
+{#
+  Leadership from content/leadership.yaml.
+  - An event with an empty `when` shows no date.
+  - `photos` is not rendered yet: it is empty (TODO in the YAML). When
+    photos are added, their fields (file, alt, caption) get rendered here.
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "leadership") | first).label %}
+
+<section id="leadership" class="section" aria-labelledby="leadership-title">
+  <div class="container">
+    <h2 id="leadership-title" class="section-title">{{ heading }}</h2>
+
+    {% for item in leadership["items"] %}
+    <article class="card leadership-card">
+      <h3 class="card-title">{{ item.title }}</h3>
+      <p class="card-meta">{{ item.meta }}</p>
+      <p>{{ item.intro }}</p>
+
+      <ul class="event-list">
+        {% for event in item.events %}
+        <li>
+          <h4 class="event-name">{{ event.name }}</h4>
+          {% if event.when %}
+          <p class="event-when">{{ event.when }}</p>
+          {% endif %}
+          <p>{{ event.text }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <p class="leadership-work">{{ item.work }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>

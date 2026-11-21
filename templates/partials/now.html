@@ -1,0 +1,54 @@
+{#
+  Now / Next / Learning log from content/now.yaml.
+  The log is a real <table> with a caption and column headings, so screen
+  readers can announce "Date" and "Entry" for every cell.
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "now") | first).label %}
+
+<section id="now" class="section" aria-labelledby="now-title">
+  <div class="container">
+    <h2 id="now-title" class="section-title">{{ heading }}</h2>
+    <p class="updated reveal">{{ site.ui.last_updated }} {{ now.last_updated }}</p>
+
+    <div class="now-grid">
+      <div class="card">
+        <ul class="plain-list">
+          {% for line in now.now %}
+          <li>{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">{{ now.next_label }}</h3>
+        <ul class="plain-list">
+          {% for line in now.next %}
+          <li>{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    {% if now.log %}
+    <div class="table-wrap reveal">
+      <table class="log-table">
+        <caption>{{ now.log_caption }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ now.log_columns.date }}</th>
+            <th scope="col">{{ now.log_columns.entry }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in now.log %}
+          <tr>
+            <td class="log-date">{{ row.date }}</td>
+            <td>{{ row.entry }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</section>

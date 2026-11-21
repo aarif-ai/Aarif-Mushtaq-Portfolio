@@ -1,0 +1,21 @@
+{#
+  Contact from site.yaml `contact`. The email address itself is the main
+  link (its text says exactly where it goes); the other links reuse the
+  hero's buttons. No form, no phone number.
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "contact") | first).label %}
+
+<section id="contact" class="section" aria-labelledby="contact-title">
+  <div class="container contact-inner reveal">
+    <h2 id="contact-title" class="section-title">{{ heading }}</h2>
+    <p class="contact-heading">{{ site.contact.heading }}</p>
+    <p class="contact-note">{{ site.contact.note }}</p>
+    <p class="contact-email"><a href="{{ site.links.email }}">{{ site.person.email }}</a></p>
+
+    <ul class="button-row">
+      <li><a class="button" href="{{ site.links.linkedin }}">{{ site.link_labels.linkedin }}</a></li>
+      <li><a class="button" href="{{ site.links.github }}">{{ site.link_labels.github }}</a></li>
+      <li><a class="button" href="{{ site.links.resume }}">{{ site.link_labels.resume }}</a></li>
+    </ul>
+  </div>
+</section>

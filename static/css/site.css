@@ -462,7 +462,8 @@ main:focus {
   background: var(--accent);
 }
 
-.hero-actions {
+.hero-actions,
+.button-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1) var(--space-2);
@@ -792,7 +793,256 @@ main:focus {
   margin-bottom: 0;
 }
 
-/* ---------- 16. Motion (only when the visitor allows it) ---------- */
+/* ---------- 16. Journey timeline ---------- */
+.timeline {
+  max-width: 46rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each item draws its own piece of the vertical line (left border) */
+.timeline-item {
+  position: relative;
+  padding: 0 0 var(--space-4) var(--space-4);
+  border-left: 1px solid var(--border-strong);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Dot on the line */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  left: -0.3125rem;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.timeline-when {
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+.timeline-what {
+  margin-bottom: 0;
+}
+
+/* Upcoming: dashed line + hollow dot (shape, not only colour) */
+.timeline-upcoming {
+  border-left-style: dashed;
+}
+
+.timeline-upcoming::before {
+  background: var(--bg);
+  border: 2px solid var(--accent-2);
+}
+
+.timeline-upcoming .timeline-what {
+  color: var(--muted);
+}
+
+/* ---------- 17. Now & learning log ---------- */
+.section-title + .updated {
+  margin-top: calc(-1 * var(--space-4));
+  margin-bottom: var(--space-4);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+.now-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 48rem) {
+  .now-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.plain-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.plain-list li + li {
+  margin-top: 0.5rem;
+}
+
+.table-wrap {
+  margin-top: var(--space-6);
+  overflow-x: auto;                  /* a wide table scrolls, not the page */
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.log-table caption {
+  margin-bottom: var(--space-2);
+  font-size: var(--step-1);
+  font-weight: 650;
+  text-align: left;
+}
+
+.log-table th,
+.log-table td {
+  padding: 0.75rem var(--space-2) 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.log-table th {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.log-date {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+/* ---------- 18. Leadership ---------- */
+.leadership-card {
+  max-width: 52rem;
+}
+
+.event-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: 2px solid var(--border);
+  list-style: none;
+}
+
+.event-name {
+  margin-bottom: 0.25rem;
+  font-size: 1.0625rem;
+}
+
+.event-when {
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+.event-list p:last-child,
+.leadership-work {
+  margin-bottom: 0;
+}
+
+/* ---------- 19. About & contact ---------- */
+.about-text p {
+  font-size: var(--step-1);
+  line-height: 1.55;
+}
+
+.contact-heading {
+  font-size: var(--step-2);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 28ch;
+}
+
+.contact-note {
+  color: var(--muted);
+}
+
+.contact-email {
+  font-size: var(--step-1);
+  overflow-wrap: anywhere;           /* long address never forces a sideways scroll */
+}
+
+.contact-email a {
+  font-weight: 600;
+}
+
+/* ---------- 20. Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: var(--space-4);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+}
+
+.footer-inner p {
+  margin: 0;
+}
+
+/* Reading progress bar: hidden unless the browser supports scroll timelines
+   and the visitor allows motion (see §21). */
+.reading-progress {
+  display: none;
+}
+
+/* ---------- 21. Motion (only when the visitor allows it) ---------- */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Scroll reveal: each block fades and rises in as it enters the
+       screen, finishing 160px after its top edge appears. Blocks already
+       on screen are simply visible. The `animation-timeline` line must come
+       after `animation`, which would otherwise reset it. */
+    .section-title,
+    .card,
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 160px;
+    }
+
+    /* Reading progress bar: grows with how far the page is scrolled */
+    .reading-progress {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 60;
+      height: 3px;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .card-glow::before {
     transition: opacity 300ms var(--ease-out);
