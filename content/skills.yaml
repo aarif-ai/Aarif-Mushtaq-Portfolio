@@ -1,5 +1,7 @@
 # Word-for-word from Resume v1. No bars, percentages or ratings.
+# `label` is the heading shown on the site (approved by Aarif, 21 Nov 2026).
 proficient:
+  label: "Proficient"
   definition: "I can write it without AI help and explain it in an interview."
   groups:
     - ["Python", "C", "SQL"]
@@ -8,6 +10,7 @@ proficient:
     - ["Git", "GitHub"]
     - ["Object-Oriented Programming"]
 familiar:
+  label: "Familiar"
   definition: "Used in projects, still need references."
   groups:
     - ["C++", "JavaScript", "HTML/CSS", "Bootstrap"]

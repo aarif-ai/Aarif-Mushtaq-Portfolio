@@ -142,6 +142,18 @@ def add_file_flags(data: Any) -> None:
             add_file_flags(value)
 
 
+def add_page_flags(content: dict[str, Any]) -> None:
+    """Mark each project with `has_page`: will its case-study page be built?
+
+    Case-study pages come from templates/case_study.html (Step 7). Until that
+    template exists, project cards show the title as plain text instead of a
+    link to a page that doesn't exist yet.
+    """
+    has_template = (TEMPLATES_DIR / "case_study.html").exists()
+    for project in content["projects"]["items"]:
+        project["has_page"] = has_template
+
+
 def italic(text: str) -> Markup:
     """Template filter: turn *text* into <em>text</em>. Nothing else.
 
@@ -332,6 +344,7 @@ def main() -> int:
     try:
         content = load_content()
         add_file_flags(content)
+        add_page_flags(content)
         prepare_dist()
         pages = render_pages(make_environment(), content)
     except yaml.YAMLError as error:

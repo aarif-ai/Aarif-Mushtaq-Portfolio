@@ -686,7 +686,123 @@ main:focus {
   font-size: 0.9375rem;
 }
 
-/* ---------- 14. Motion (only when the visitor allows it) ---------- */
+/* ---------- 14. Projects ---------- */
+.project-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 48rem) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card .status-pill {
+  align-self: flex-start;            /* pill hugs its text, not the card width */
+}
+
+.project-card .card-links {
+  margin-top: auto;                  /* links line up at the card bottom */
+}
+
+.project-summary {
+  margin-top: var(--space-2);
+}
+
+/* The title link stretches over the whole card, so any click on the card
+   opens the case study. Real links inside the card sit above it. */
+.card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.card .card-links {
+  position: relative;
+  z-index: 2;
+}
+
+/* Glow: a radial highlight drawn behind the card's content.
+   card-glow.js sets --glow-x/--glow-y; it shows only on hover with a mouse. */
+.card-glow {
+  isolation: isolate;
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle 260px at var(--glow-x, 50%) var(--glow-y, 0%),
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-glow:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+
+/* ---------- 15. Skills ---------- */
+.skills-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 48rem) {
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.skill-definition {
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+}
+
+/* Extra space between groups, so related skills read as one row */
+.skill-group {
+  margin-bottom: var(--space-2);
+}
+
+.skill-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 16. Motion (only when the visitor allows it) ---------- */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .card-glow::before {
+    transition: opacity 300ms var(--ease-out);
+  }
+
+  .card-glow:hover::before {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero-canvas {
     transition: opacity 600ms var(--ease-out);

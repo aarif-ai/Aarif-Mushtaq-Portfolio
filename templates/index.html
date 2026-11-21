@@ -2,12 +2,13 @@
 
 {# Section ids on this page that the header may link to. Add each id here
    when its section is built (research, projects, skills, ...). #}
-{% set nav_sections = ["research"] %}
+{% set nav_sections = ["research", "projects", "skills"] %}
 {% set is_home = true %}
 
 {% block scripts %}
   <script src="/js/hero-network.js" defer></script>
   <script src="/js/stats-count.js" defer></script>
+  <script src="/js/card-glow.js" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -37,4 +38,6 @@
 
 {% include "partials/stats.html" %}
 {% include "partials/research.html" %}
+{% include "partials/projects.html" %}
+{% include "partials/skills.html" %}
 {% endblock %}

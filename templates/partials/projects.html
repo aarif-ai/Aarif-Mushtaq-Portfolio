@@ -1,0 +1,40 @@
+{#
+  Projects section: one card per item in content/projects.yaml.
+  The title links to the case-study page once that page is built
+  (`has_page`, set by build.py). The link covers the whole card
+  (see .card-link in site.css); the card's own links sit above it.
+  Never shown here: slug, status_kind, and the case-study fields.
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "projects") | first).label %}
+
+<section id="projects" class="section" aria-labelledby="projects-title">
+  <div class="container">
+    <h2 id="projects-title" class="section-title">{{ heading }}</h2>
+
+    <div class="project-grid">
+      {% for project in projects["items"] %}
+      <article class="card card-glow project-card" aria-labelledby="project-{{ project.slug }}">
+        <p class="status-pill status-{{ project.status_kind }}">{{ project.status }}</p>
+        <h3 id="project-{{ project.slug }}" class="card-title">
+          {% if project.has_page %}
+          <a class="card-link" href="{{ project.page }}">{{ project.title }}</a>
+          {% else %}
+          {{ project.title }}
+          {% endif %}
+        </h3>
+        <p class="card-meta">{{ project.subtitle }}</p>
+        <p class="project-summary">{{ project.card }}</p>
+
+        <ul class="tags">
+          {% for tech in project.stack %}
+          <li>{{ tech }}</li>
+          {% endfor %}
+        </ul>
+
+        {% set links = project.links %}
+        {% include "partials/links.html" %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
