@@ -1,0 +1,74 @@
+# Projects. Each has a home-page card and its own case-study page.
+items:
+  - slug: "campushub"
+    page: "/campushub.html"
+    title: "CampusHub"
+    subtitle: "Campus event management platform"
+    status: "Complete — not deployed yet"
+    status_kind: "complete"
+    stack: ["Python", "Flask", "SQLAlchemy", "PostgreSQL", "pytest", "GitHub Actions"]
+    card: "A Flask platform that runs the full lifecycle of a campus event for 4 roles, with QR attendance, PDF certificates, 351 tests and CI."
+    problem: "Running a campus event involves several people. An organiser proposes it, the department approves it, logistics prepares it, and students attend and need certificates. CampusHub puts the whole lifecycle (Draft → Submitted → Approved/Rejected → Published → Completed) in one web app, with a separate role for each person."
+    role: "Solo project. I designed and built it with AI assistance (Claude), and I can walk through and explain every module."
+    architecture:
+      text: "Browser → Flask routes (kept thin) → 25 service modules → SQLAlchemy models → SQLite (development) / PostgreSQL. Alongside: Alembic migrations, ReportLab (PDF certificates), Resend (email), GitHub Actions CI."
+      diagrams:
+        - file: "/diagrams/campushub-architecture.svg"
+          alt: "CampusHub architecture: browser to thin Flask routes, to 25 service modules, to SQLAlchemy models, to SQLite or PostgreSQL; side components Alembic, ReportLab, Resend and GitHub Actions CI."
+        - file: "/diagrams/campushub-lifecycle.svg"
+          alt: "Event lifecycle: Draft, Submitted, then Approved or Rejected, Published, Completed."
+    decisions:
+      - title: "Business logic in a service layer, not in routes"
+        body: "Routes only handle HTTP. The 25 service modules hold the rules (who can approve what, when an event can be published), so they live in one place and can be tested without a browser."
+      - title: "Duplicate check-ins are blocked by the database, not only by code"
+        body: "If two QR scans arrive at the same moment, a check in Python can pass for both. A UNIQUE constraint makes the database reject the second insert."
+      - title: "Signed QR tokens"
+        body: "Attendance QR codes carry a token signed with the server's secret key, so an edited or forged code fails verification. The same idea powers a public page that verifies certificates."
+      - title: "Partial unique indexes"
+        body: "Exactly one Organizer and one Logistics account are enforced at the database level."
+    security: "Hashed passwords, CSRF protection, role checks on every route, login throttling, safe file uploads, security headers, expiring password-reset links."
+    testing: "351 pytest tests. GitHub Actions runs Ruff (lint) and pytest, in parallel, on every push and pull request. Schema changes go through 11 Alembic migrations. Tested on PostgreSQL 16."
+    screenshots: []   # TODO(Aarif): 4–5 screenshots with demo data only, after confirming the UI says "CampusHub".
+    reflection_title: "What I'd do differently"
+    reflection:
+      - "Deploy early and keep it live. My first deployment went down when the free hosting tier ended."
+      - "Write the core modules myself before using AI, so understanding comes before speed."
+    links:
+      - label: "Code available on request (private repository)"
+        href: ""
+      - label: "Live demo: coming after redeployment"
+        href: ""
+
+  - slug: "hostel"
+    page: "/hostel.html"
+    title: "Hostel Management System"
+    subtitle: "Hostel administration web app"
+    status: "Complete — not deployed"
+    status_kind: "complete"
+    stack: ["Python", "Flask", "SQLite", "Bootstrap", "JavaScript"]
+    card: "A Flask and SQLite admin app for rooms, attendance, fees, complaints, visitors and food-wastage fines."
+    problem: "Hostel administration was tracked by hand: who lives in which room, daily attendance, fees, complaints and visitors. This app puts it in one admin web app."
+    role: "Semester 2 group project. I wrote all the code; teammates helped prepare the project report."
+    architecture:
+      text: "Admin browser → Flask app (7 modules: students, rooms, attendance, fees, complaints, visitors, food wastage) → SQLite."
+      diagrams:
+        - file: "/diagrams/hostel-architecture.svg"
+          alt: "Hostel Management System architecture: admin browser to a Flask app with 7 modules, to a SQLite database."
+    decisions:
+      - title: "One attendance record per student per day"
+        body: "A UNIQUE(student, date) constraint plus an upsert means re-marking a day updates the record instead of creating a duplicate."
+      - title: "Attendance percentage is calculated, not typed in"
+        body: "Percentage = days marked Present ÷ days marked × 100. Students below 75% are listed as defaulters."
+      - title: "Food-wastage fines are calculated per month"
+        body: "Each recorded wastage incident carries a ₹20 fine. The admin applies a student's monthly total as a pending \"Food Wastage Fine\" fee."
+      - title: "Admin login"
+        body: "Hashed passwords (werkzeug) and Flask's session-based authentication."
+    screenshots: []   # TODO(Aarif): 2–3 screenshots with demo data only.
+    reflection_title: "Known gaps (fixing now)"
+    reflection:
+      - "The secret key is hard-coded."
+      - "There are no automated tests."
+      - "It isn't deployed."
+    links:
+      - label: "GitHub"
+        href: "https://github.com/aarif-ai/Hostel-Management-System"

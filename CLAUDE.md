@@ -1,65 +1,78 @@
 # CLAUDE.md — Aarif-Mushtaq-Portfolio
 
 Personal portfolio of Aarif Mushtaq (B.Tech AI & Data Science, University of Kashmir).
-Static site: plain HTML, CSS and a little JavaScript. Hosted on Netlify from this repo.
+A polished, animated, fast static site generated with Python. Hosted on Netlify.
+This is a long-lived site: Aarif updates it every few months (next: March 2027) by editing YAML only.
 
-## 1. Content rules (most important)
-- `content.md` is the ONLY source of text. Copy it verbatim. Do not rephrase, add adjectives, add claims, or "improve" copy.
-- If a page needs text that is not in `content.md`, STOP and ask Aarif. Never invent metrics, users, results, dates, testimonials or skills.
-- A `TODO:` line in `content.md` stays a visible placeholder or is left out — never filled with made-up content.
-- Forbidden on this site, always:
+## 1. Content rules (highest priority — never break these)
+- `content/*.yaml` is the ONLY source of text. Templates render it verbatim. Never rephrase, add adjectives, add claims or "improve" copy in templates.
+- If a page needs text that isn't in the YAML, STOP and ask Aarif. Never invent metrics, users, results, dates, testimonials, logos or skills.
+- Empty lists (`screenshots: []`, `photos: []`) and `TODO` comments mean "not available yet" → render nothing, never a placeholder.
+- Forbidden on the site, always:
   - The CampusHub AI Event Assistant (not working yet) — no mention at all.
-  - Any results, accuracy numbers or conclusions for the Agent Diversity research (none exist).
-  - Lines-of-code counts.
-  - Skill bars, percentages, star ratings or "level" meters.
-  - Chatbots, AI widgets, analytics, trackers, cookie banners.
-  - Buzzwords: passionate, innovative, cutting-edge, leverage, synergy, seamless, robust, world-class, ninja, guru, expert.
+  - Any results, accuracy numbers, charts or conclusions for the Agent Diversity research (none exist). Decorative animations must never look like data.
+  - Lines-of-code counts. Skill bars, percentages, star ratings or level meters.
+  - Chatbots, AI widgets, analytics, trackers, cookie banners. Phone number.
   - The phrases "vector database" or "semantic search" for CampusHub.
-  - Phone number.
-- Private repos are shown as "Code available on request (private repository)" — never link them.
+  - Buzzwords: passionate, innovative, cutting-edge, leverage, synergy, seamless, robust, world-class, ninja, guru, rockstar.
+- Private repos: show "Code available on request (private repository)" as plain text, never a link.
+- `build.py` enforces the checkable parts of these rules (see §4) and must fail the build on a violation.
 
-## 2. Tech constraints
-- No frameworks, no build step, no npm dependencies in the site, no CDNs, no web fonts. System font stack only.
-- One shared stylesheet `site/css/style.css`; one small script `site/js/main.js` (mobile nav only). Pages must work fully with JavaScript turned off.
-- Everything public lives in `site/`. `netlify.toml` publishes `site/` only, so `content.md`, `CLAUDE.md` and `README.md` are not served.
-- Diagrams are hand-written inline-friendly SVG files in `site/assets/diagrams/`, each with `<title>` and `<desc>`, using `currentColor` so they work in dark mode.
+## 2. Stack
+- **Python 3.12 + Jinja2 + PyYAML** → static HTML. `build.py` renders `templates/` with `content/*.yaml` into `dist/` and copies `static/` into `dist/`.
+- Front end: hand-written HTML, CSS and vanilla JavaScript. No React, Vue, Tailwind, jQuery, GSAP or any CDN. No npm.
+- Fonts: self-hosted WOFF2 in `static/fonts/` — Inter (variable) for text, JetBrains Mono for labels/code. Latin subset only, `font-display: swap`, keep the font licence files. Preload only the body font.
+- `dist/` is generated: never edit it by hand, never commit it.
 
-## 3. Structure
 ```
-site/
-  index.html            Hero → Research → Projects (cards) → Skills → Now → Leadership → About + Contact
-  campushub.html        CampusHub full case study
-  hostel.html           Hostel Management System case study
-  404.html
-  css/style.css
-  js/main.js
-  assets/img/           screenshots and photos (.webp)
-  assets/diagrams/      .svg diagrams
-  assets/docs/          Aarif_Mushtaq_Resume_v1.pdf, rag-concentrated-review.pdf
-  favicon.svg
-content.md  CLAUDE.md  README.md  netlify.toml
+content/      site.yaml research.yaml projects.yaml skills.yaml now.yaml leadership.yaml
+templates/    base.html  index.html  case_study.html  404.html  partials/*.html
+static/       css/  js/  fonts/  img/  diagrams/  docs/  favicon.svg
+build.py  requirements.txt  netlify.toml  README.md  CLAUDE.md  BUILD_STEPS.md
+dist/         ← generated output (git-ignored); Netlify publishes this
 ```
-Case-study pages use the same order: Problem → My role → Architecture → Key decisions → Security/Testing → Screenshots → What I'd do differently / Known gaps → Links.
+Local run: `python build.py` then `python -m http.server 8000 --directory dist`.
 
-## 4. Accessibility (WCAG 2.1 AA)
-- Semantic HTML: one `<h1>` per page, headings in order, `<header> <nav> <main> <section> <footer>`, `lang="en"`.
-- "Skip to content" link; visible focus styles; every interactive element reachable by keyboard.
-- Text contrast ≥ 4.5:1 in both light and dark (`prefers-color-scheme`).
-- Every image has meaningful `alt` text (decorative images: `alt=""`). Respect `prefers-reduced-motion`.
-- Links say where they go ("Read the CampusHub case study", not "click here"). External links open in the same tab.
+## 3. Design system — "research lab, dark first"
+- Feel: precise, calm, technical, premium. Dark theme by default with a light theme toggle; follows `prefers-color-scheme` until the visitor chooses.
+- Colour via CSS custom properties only. Starting point (adjust only to pass contrast): background `#0a0e14`, surface `#111823`, border `#1e2a3a`, text `#e6edf3`, muted `#9aa7b6`, accent `#5eead4` (teal), accent-2 `#818cf8` (indigo). Light theme equivalents with the same contrast. Every text/background pair ≥ 4.5:1 (≥ 3:1 for large text and UI borders).
+- Type scale with `clamp()`; body 1rem–1.125rem, line-height ~1.6, max line length ~70ch. Mono font for eyebrows, tags, dates, status pills.
+- Layout: mobile-first; content max-width ~1100px; generous spacing on an 8px scale. Home page: sticky header with section links and active-section highlight.
+- Components: status pill (ongoing = accent, complete = accent-2), tech tags, cards with subtle border + hover glow, stat counters, timeline, decision cards, sticky table of contents on case studies.
 
-## 5. Performance
-- Mobile-first CSS (base styles for ~360px, `min-width` media queries upward).
-- Each HTML page < 50 KB; CSS < 20 KB; JS < 5 KB.
-- Images: `.webp`, max 1600 px wide, ≤ 150 KB each, with `width`, `height` and `loading="lazy"` (except above-the-fold).
-- Target Lighthouse ≥ 95 for Performance, Accessibility, Best Practices and SEO on mobile.
+## 4. Motion (beautiful, but never at the cost of speed or accessibility)
+Allowed effects — and only these unless Aarif approves more:
+1. **Hero network canvas**: slow drifting nodes joined by faint lines (a nod to LLM agent teams). `<canvas aria-hidden="true">`, ≤ 60 nodes, device-pixel-ratio capped at 2, paused when off-screen (IntersectionObserver) or tab hidden. Reduced motion → draw one static frame.
+2. **Scroll reveal**: sections fade/rise in using CSS scroll-driven animations (`animation-timeline: view()`) inside `@supports (animation-timeline: view())`. Without support, content is simply visible.
+3. **Reading progress bar**: `animation-timeline: scroll(root)`, CSS only.
+4. **Stat count-up**: the HTML always contains the final number; JS animates from 0 once when visible. Reduced motion or no JS → final number shown.
+5. **Card glow**: radial highlight that follows the pointer via CSS variables set on `pointermove`. No effect on touch devices.
+6. **Page transitions** between home and case studies: cross-document View Transitions (`@view-transition { navigation: auto; }`) with shared names on project titles.
+7. **Diagram draw-in**: SVG strokes animate with `stroke-dashoffset` on a view timeline.
+8. **Theme toggle**: smooth colour transition; choice saved in `localStorage` (wrapped in try/catch).
+Rules for every effect:
+- Animate only `transform` and `opacity` (plus `stroke-dashoffset` for diagrams). 150–600ms, ease-out. Nothing loops except the hero canvas.
+- Everything is wrapped in `@media (prefers-reduced-motion: no-preference)` or checked with `matchMedia` in JS. The site must look complete and polished with all motion off.
+- No scroll-jacking, no custom cursor, no autoplay video, no parallax on text.
 
-## 6. SEO / meta
-Each page: `<title>`, meta description, Open Graph title/description, canonical URL (add once the Netlify URL is known), `favicon.svg`.
+## 5. Accessibility (WCAG 2.1 AA)
+Semantic landmarks, `lang="en"`, one `<h1>` per page, ordered headings, skip link, visible focus styles (`:focus-visible`), full keyboard use, theme toggle is a `<button>` with `aria-pressed`, meaningful `alt` text from YAML, link text says where it goes, no information by colour alone.
 
-## 7. How to work with Aarif
-- Work in small steps. Do only the step asked; then stop and list what changed and what Aarif should check.
-- Explain every change in 2–3 plain lines (what and why). Aarif is learning HTML/CSS and must be able to maintain this site himself.
-- When a choice involves a concept he may not know (e.g. CSS grid, media queries, `srcset`), name it and explain it briefly.
-- Never commit or push unless Aarif says so. Suggest a commit message in Conventional Commits style (`feat:`, `fix:`, `docs:`, `style:`).
-- Before finishing a step, re-read the changed pages against `content.md` and Section 1 of this file, and report any mismatch.
+## 6. Performance budget (mobile)
+- Lighthouse ≥ 95 in Performance, Accessibility, Best Practices, SEO.
+- JS ≤ 30 KB total (uncompressed), CSS ≤ 40 KB, fonts ≤ 150 KB total, each image ≤ 150 KB `.webp` with `width`/`height`, `loading="lazy"` below the fold.
+- No layout shift (CLS < 0.05). Scripts loaded with `defer`. The only blocking script allowed is a tiny theme script in `<head>` to avoid a colour flash.
+- Content Security Policy in `netlify.toml` allows only `'self'` — so no inline `<script>` or inline `style=""` attributes; put everything in files.
+
+## 7. build.py requirements
+- Load every `content/*.yaml`; render with `jinja2.StrictUndefined` (a missing key must crash the build); autoescape on; a small markdown-ish filter for `*italic*` only.
+- Output: `dist/index.html`, `dist/<slug>.html` per project (from `case_study.html`), `dist/404.html`; copy `static/` into `dist/`.
+- Fail the build (non-zero exit, clear message) if the rendered HTML contains: the forbidden phrases in §1, the word "TODO", a phone number pattern, or a local link/image/`src` that doesn't exist in `dist/`.
+- Print a short summary: pages built, total size of HTML/CSS/JS/fonts vs the §6 budget.
+- Plain, readable Python with type hints and docstrings — Aarif must be able to explain every function.
+
+## 8. How to work with Aarif
+- Follow `BUILD_STEPS.md`. Do only the current step; then stop and list what changed and what Aarif should check.
+- Explain each change in 2–3 plain lines, and name any concept he may not know (e.g. view timeline, CSS custom properties, StrictUndefined) with a one-line explanation.
+- Never commit or push. Suggest a Conventional Commits message (`feat:`, `fix:`, `style:`, `docs:`, `build:`).
+- Before finishing a step: run `python build.py`, make sure it passes, and re-check the changed pages against §1.

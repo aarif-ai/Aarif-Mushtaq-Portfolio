@@ -1,0 +1,13 @@
+items:
+  - title: "Founder & Student Coordinator, VERITAS Language Club"
+    meta: "University of Kashmir, North Campus · Founded Sep 2026 · Paused for exams, resuming March 2027"
+    intro: "I started a language club with support from the Campus Director and a faculty advisor, and organised 2 events with 100+ participants each:"
+    events:
+      - name: "VERITAS: The First Voice"
+        when: "11 Sep 2026"
+        text: "The inaugural debate, judged by department coordinators, with awards for Winning Team, Best Speaker and Best Rebuttal."
+      - name: "VERITAS: Beyond the Screen"
+        when: ""
+        text: "A film screening followed by a \"Take Your Stand\" discussion."
+    work: "I planned each event: schedules, debate rules, judging score sheets, official letterhead and letters, and certificates."
+    photos: []   # TODO(Aarif): 4–5 event photos with one-line captions; only photos the people in them are fine with.

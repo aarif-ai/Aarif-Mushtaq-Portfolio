@@ -1,6 +1,10 @@
-# Netlify serves only the site/ folder. content.md, CLAUDE.md and README.md stay private.
+# Netlify runs build.py and publishes the generated dist/ folder.
 [build]
-  publish = "site"
+  command = "pip install -r requirements.txt && python build.py"
+  publish = "dist"
+
+[build.environment]
+  PYTHON_VERSION = "3.12"
 
 [[headers]]
   for = "/*"
@@ -9,9 +13,14 @@
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
 
 [[headers]]
-  for = "/assets/*"
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/img/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"

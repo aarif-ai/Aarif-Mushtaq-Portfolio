@@ -1,0 +1,17 @@
+# Word-for-word from Resume v1. No bars, percentages or ratings.
+proficient:
+  definition: "I can write it without AI help and explain it in an interview."
+  groups:
+    - ["Python", "C", "SQL"]
+    - ["SQLite", "MySQL"]
+    - ["NumPy", "Pandas", "Matplotlib"]
+    - ["Git", "GitHub"]
+    - ["Object-Oriented Programming"]
+familiar:
+  definition: "Used in projects, still need references."
+  groups:
+    - ["C++", "JavaScript", "HTML/CSS", "Bootstrap"]
+    - ["Flask", "Jinja2", "SQLAlchemy", "Alembic", "PostgreSQL"]
+    - ["pytest", "GitHub Actions (CI)"]
+    - ["Jupyter", "Exploratory Data Analysis"]
+    - ["vLLM", "LLM inference and evaluation", "prompt design", "RAG"]

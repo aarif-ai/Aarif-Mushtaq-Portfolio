@@ -1,0 +1,46 @@
+# Research section. NEVER add results for agent-diversity until they exist in Master_Profile.md.
+items:
+  - slug: "agent-diversity"
+    title: "Same Model or Mixed Models? Error Correlation in Open-Weight LLM Agent Teams"
+    meta: "Faculty-supervised B.Tech research · 2026 – present"
+    status: "Ongoing — pipeline built, no results yet"
+    status_kind: "ongoing"
+    tags: ["Python", "vLLM", "pytest", "LLM evaluation"]
+    question: "When three LLM agents vote on an answer, majority voting only helps if they get different questions wrong. I'm testing whether teams of different open-weight models make fewer shared mistakes than teams of three copies of one model."
+    setup:
+      - "6 open-weight 7–9B instruction models: Qwen2.5-7B, Qwen3-8B, Llama-3.1-8B, Gemma-2-9B, Mistral-7B-v0.3, OLMo-2-7B, with pinned revisions."
+      - "56 three-agent teams: every combination with repeats (6 same-model, 30 two-of-one, 20 all-different)."
+      - "4 reasoning benchmarks: GSM8K, ARC-Challenge, MMLU-Pro, StrategyQA, with 500 frozen question IDs each, a calibration/evaluation split and SHA-256 data manifests."
+    built: "Batched offline inference with vLLM on one NVIDIA A30 (24 GB); versioned prompts; an answer parser and scorer tested with pytest; tooling to hand-check the parser; smoke tests of all 6 models and 4 quantized checkpoints; decision, run and literature logs."
+    next: "Validating the answer parser by hand before the full benchmark runs. This page will be updated when there are results."
+    diagram:
+      file: "/diagrams/agent-diversity-pipeline.svg"
+      alt: "Pipeline: frozen question IDs, versioned prompts, vLLM batched inference across 6 models, answer parser, scorer, and a final team-analysis stage that has not been run yet."
+      boxes: ["Frozen question IDs", "Versioned prompts", "vLLM batched inference (6 models)", "Answer parser", "Scorer", "Team analysis — not run yet (dashed)"]
+    links:
+      - label: "Code available on request (private repository)"
+        href: ""
+
+  - slug: "rag-review"
+    title: "A Concentrated Review on Retrieval-Augmented Generation: Towards Reliable Question Answering over Real-World Educational Documents"
+    meta: "Course research paper · Professional Practice & Digital Skills Lab · 2026 · Defended in a viva"
+    status: "Complete — follow-up study proposed"
+    status_kind: "complete"
+    tags: ["RAG", "Literature review", "LLMs"]
+    question: "How ready is RAG for answering questions over real educational documents? Syllabi, handouts and regulations are PDFs with tables and layout, and they change every year. Most RAG research was tested on clean Wikipedia text."
+    method: "A narrative review of three core papers read in full: the original RAG paper (Lewis et al., 2020), a survey of retrieval-augmented LLMs (Fan et al., KDD 2024) and a systematic review of 128 RAG studies (Brown et al., 2025). I compared them on nine aspects that matter for educational documents."
+    findings:
+      - "Document structure and tables get only brief treatment."
+      - "Education is 3.12% of the 128 studies (four studies)."
+      - "Those studies use separate datasets, simple chunking and different success measures, so they can't be compared."
+      - "The core papers report no shared benchmark for educational documents."
+    contribution: "Six challenges mapped onto the stages of a RAG pipeline (parsing, chunking, retrieval, generation, refusing when the answer isn't there, cost and privacy) and a proposed six-step study to address them."
+    figure:
+      file: "/img/rag-challenges.webp"
+      alt: "RAG pipeline from source documents to answer, with six challenges marked at the parsing, chunking, retrieval, generation and answer stages."
+      todo: "Aarif to export Fig. 6 from the paper as an image."
+    next: "A planned study on public University of Kashmir syllabi and statutes: 3 chunking strategies (fixed-length, structure-based, table-aware) × 3 retrievers (dense, BM25, hybrid) = 9 configurations. Nothing built yet; no results."
+    limits: "Narrative review, not systematic; only three papers were read in full."
+    links:
+      - label: "Read the paper (PDF)"
+        href: "/docs/rag-concentrated-review.pdf"
