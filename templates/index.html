@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
+{# Section ids on this page that the header may link to. Add each id here
+   when its section is built (research, projects, skills, ...). #}
+{% set nav_sections = [] %}
+{% set is_home = true %}
+
 {% block content %}
-<section id="hero" aria-labelledby="hero-name">
-  <p>{{ site.hero.eyebrow }}</p>
+<section id="hero" class="container" aria-labelledby="hero-name">
+  <p class="eyebrow">{{ site.hero.eyebrow }}</p>
   <h1 id="hero-name">{{ site.person.name }}</h1>
   <p>{{ site.hero.positioning }}</p>
   <p>{{ site.hero.availability }}</p>

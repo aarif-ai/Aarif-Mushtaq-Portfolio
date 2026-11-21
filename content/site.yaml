@@ -9,6 +9,30 @@ person:
   location: "Kashmir, India"
   email: "aarifmushtaq542@gmail.com"
 
+# Interface labels (approved by Aarif, 21 Nov 2026).
+ui:
+  skip_link: "Skip to main content"
+  theme_toggle: "Light theme"
+
+# Header section links. A link appears only once its section exists on the page.
+nav:
+  - id: "research"
+    label: "Research"
+  - id: "projects"
+    label: "Projects"
+  - id: "skills"
+    label: "Skills"
+  - id: "journey"
+    label: "Journey"
+  - id: "now"
+    label: "Now"
+  - id: "leadership"
+    label: "Leadership"
+  - id: "about"
+    label: "About"
+  - id: "contact"
+    label: "Contact"
+
 hero:
   eyebrow: "AI & Data Science · LLM research · Python engineering"
   positioning: "I do faculty-supervised research on open-weight LLM agent teams and build tested, database-backed web applications in Python."

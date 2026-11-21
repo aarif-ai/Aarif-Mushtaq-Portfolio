@@ -3,10 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
   <title>{% block title %}{{ site.person.name }}{% endblock %}</title>
+  <link rel="preload" href="/fonts/InterVariable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/site.css">
+  {# Blocking on purpose: applies the saved theme before first paint. #}
+  <script src="/js/theme-init.js"></script>
+  <script src="/js/theme-toggle.js" defer></script>
 </head>
 <body>
-  <main id="main">
+  <a class="skip-link" href="#main">{{ site.ui.skip_link }}</a>
+
+  {% include "partials/header.html" %}
+
+  <main id="main" tabindex="-1">
     {% block content %}{% endblock %}
   </main>
 </body>

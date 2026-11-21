@@ -1,0 +1,393 @@
+/* =====================================================================
+   Aarif Mushtaq — portfolio stylesheet
+   1. Fonts   2. Tokens (dark default)   3. Light theme   4. Base
+   5. Layout & utilities   6. Header   7. Theme toggle   8. Motion
+   ===================================================================== */
+
+/* ---------- 1. Fonts (self-hosted, Latin subset) ---------- */
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/InterVariable-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-latin.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- 2. Design tokens — dark theme is the default ---------- */
+:root {
+  color-scheme: dark;
+
+  /* Colour */
+  --bg: #0a0e14;
+  --surface: #111823;
+  --border: #1e2a3a;          /* decorative lines: cards, dividers */
+  --border-strong: #5b6b7f;   /* borders of controls; >= 3:1 on bg and surface */
+  --text: #e6edf3;
+  --muted: #9aa7b6;
+  --accent: #5eead4;          /* teal: links, focus, "ongoing" */
+  --accent-2: #818cf8;        /* indigo: "complete" */
+  --on-accent: #04201c;       /* text placed on an accent background */
+  --header-bg: rgb(10 14 20 / 0.85);
+  --show-moon: inline-block;  /* theme icon for the current theme */
+  --show-sun: none;
+
+  /* Type */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --step-2: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --step-3: clamp(2rem, 1.6rem + 2vw, 3rem);
+  --step-4: clamp(2.5rem, 1.8rem + 3.5vw, 4.5rem);
+  --leading: 1.6;
+  --measure: 70ch;
+
+  /* Space — 8px scale */
+  --space-1: 0.5rem;   /*  8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-6: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-12: 6rem;    /* 96px */
+
+  /* Layout & shape */
+  --content-max: 1100px;
+  --gutter: var(--space-2);
+  --header-h: 3.5rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Motion */
+  --duration: 300ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 3. Light theme ----------
+   Used when the visitor chose light (data-theme="light"), or when their
+   system prefers light and they haven't chosen dark. Same block twice
+   because plain CSS can't share it. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f7f9fb;
+    --surface: #ffffff;
+    --border: #dde3ea;
+    --border-strong: #7d8a99;
+    --text: #0d1520;
+    --muted: #4f5b69;
+    --accent: #0d766e;
+    --accent-2: #4f46e5;
+    --on-accent: #ffffff;
+    --header-bg: rgb(247 249 251 / 0.85);
+    --show-moon: none;
+    --show-sun: inline-block;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f9fb;
+  --surface: #ffffff;
+  --border: #dde3ea;
+  --border-strong: #7d8a99;
+  --text: #0d1520;
+  --muted: #4f5b69;
+  --accent: #0d766e;
+  --accent-2: #4f46e5;
+  --on-accent: #ffffff;
+  --header-bg: rgb(247 249 251 / 0.85);
+  --show-moon: none;
+  --show-sun: inline-block;
+}
+
+/* ---------- 4. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: var(--leading);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 var(--space-2);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); }
+
+p {
+  margin: 0 0 var(--space-2);
+}
+
+p,
+li {
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Small mono labels: eyebrows, tags, dates, status pills */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+/* ---------- 5. Layout & utilities ---------- */
+.container {
+  width: 100%;
+  max-width: calc(var(--content-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: var(--space-4);
+  }
+}
+
+main {
+  display: block;
+  padding-block: var(--space-8);
+}
+
+/* <main> is focused by the skip link; it needs no ring of its own */
+main:focus {
+  outline: none;
+}
+
+/* Sections land below the sticky header when reached by a #link */
+[id] {
+  scroll-margin-top: calc(var(--header-h) + var(--space-2));
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: hidden until it receives keyboard focus */
+.skip-link {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-1);
+  z-index: 100;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Visible keyboard focus everywhere; mouse clicks don't show it */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- 6. Sticky header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-3);
+  min-height: var(--header-h);
+}
+
+.brand {
+  margin-right: auto;
+  color: var(--text);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+/* On small screens the links sit on their own row and scroll sideways
+   inside the header, so the page itself never scrolls sideways. */
+.site-nav {
+  order: 3;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-list {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0 0 var(--space-1);
+  list-style: none;
+}
+
+.nav-list a {
+  display: block;
+  padding: 0.25rem var(--space-1);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.nav-list a:hover,
+.nav-list a[aria-current="true"] {
+  color: var(--text);
+}
+
+/* Current section: underline as well as colour, so it isn't colour alone */
+.nav-list a[aria-current="true"] {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+@media (min-width: 60rem) {
+  .site-nav {
+    order: 0;
+    width: auto;
+  }
+
+  .nav-list {
+    padding: 0;
+  }
+}
+
+/* ---------- 7. Theme toggle ---------- */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+  display: none;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon-moon { display: var(--show-moon); }
+.icon-sun { display: var(--show-sun); }
+
+/* ---------- 8. Motion (only when the visitor allows it) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .skip-link {
+    transition: transform 150ms var(--ease-out);
+  }
+
+  /* Smooth colour change, only for the moment the theme is switched
+     (theme-toggle.js adds this class briefly), never on page load. */
+  .theme-changing,
+  .theme-changing *,
+  .theme-changing *::before,
+  .theme-changing *::after {
+    transition:
+      background-color var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease-out),
+      color var(--duration) var(--ease-out),
+      fill var(--duration) var(--ease-out),
+      stroke var(--duration) var(--ease-out);
+  }
+}
