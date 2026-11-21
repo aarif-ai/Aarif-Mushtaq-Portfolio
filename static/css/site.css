@@ -1126,9 +1126,40 @@ main:focus {
 }
 
 /* ---------- 19. About & contact ---------- */
-.about-text p {
+/* About: intro, facts strip (2×2 on phones, one row on desktop) and three
+   blocks; reuses .card, .field-label and .plain-list */
+.about-intro {
   font-size: var(--step-1);
-  line-height: 1.55;
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+.about-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-4) 0 var(--space-3);
+}
+
+.about-facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.about-blocks {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 48rem) {
+  .about-facts {
+    grid-template-columns: 2fr repeat(3, 1fr);
+  }
+
+  .about-blocks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
 }
 
 .contact-heading {
@@ -1672,6 +1703,7 @@ main:focus {
   .paper-contact a,
   .r-title a,
   .r-when a,
+  .about-list a,
   .toc-list a {
     display: inline-flex;
     align-items: center;

@@ -1,12 +1,41 @@
-{# About: paragraphs from site.yaml `about`. `italic` turns *title* into <em>. #}
+{#
+  About from site.yaml `about`: a short intro, a facts strip and three blocks.
+  Reuses existing pieces: .card boxes (with the scroll reveal), the mono
+  .field-label style for small headings, .plain-list for the lines.
+  An item with `href` links to that section; `italic` turns *title* into <em>.
+#}
 {% from "partials/macros.html" import section_title with context %}
 
 <section id="about" class="section" aria-labelledby="about-title">
   <div class="container">
     {{ section_title("about") }}
-    <div class="about-text">
-      {% for paragraph in site.about %}
-      <p class="reveal">{{ paragraph | italic }}</p>
+    <p class="about-intro reveal">{{ site.about.intro }}</p>
+
+    <dl class="card about-facts">
+      {% for fact in site.about.facts %}
+      <div>
+        <dt class="field-label">{{ fact.label }}</dt>
+        <dd>{{ fact.value }}</dd>
+      </div>
+      {% endfor %}
+    </dl>
+
+    <div class="about-blocks">
+      {% for block in site.about.blocks %}
+      <div class="card">
+        <h3 class="field-label">{{ block.heading }}</h3>
+        <ul class="plain-list about-list">
+          {% for item in block["items"] %}
+          <li>
+            {% if item.href is defined %}
+            <a href="{{ item.href }}">{{ item.text | italic }}</a>
+            {% else %}
+            {{ item.text | italic }}
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
       {% endfor %}
     </div>
   </div>

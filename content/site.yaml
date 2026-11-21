@@ -1,5 +1,5 @@
 # Site-wide content. Every claim must match Master_Profile.md and Resume v1.
-last_updated: "21 Nov 2026"
+last_updated: "22 Nov 2026"
 
 # The live address. One value, used for canonical links, Open Graph,
 # robots.txt and sitemap.xml. Must start with https://.
@@ -24,8 +24,8 @@ person:
   name: "Aarif Mushtaq"
   degree: "B.Tech in Artificial Intelligence & Data Science"
   university: "University of Kashmir"
-  years: "2025–2029"
-  location: "Kashmir, India"
+  years: &years "2025–2029"           # &years: reused in about.facts
+  location: &location "Kashmir, India"  # &location: reused in about.facts
   email: "aarifmushtaq542@gmail.com"
   photo: "/img/aarif.webp"          # 440x440 square, ~37 KB
   photo_alt: "Aarif Mushtaq"
@@ -117,11 +117,36 @@ timeline:
     what: "Next: daily DSA in C++, RAG and AI agents, rebuilding my own code without AI."
     upcoming: true
 
+# About: a short intro, a facts strip and three scannable blocks.
+# Items with `href` link to that section; *text* is shown in italics.
 about:
-  - "I'm Aarif, a B.Tech student in AI & Data Science at the University of Kashmir's North Campus (Semester 1 SGPA: 8.65/10)."
-  - "When I take something on, I give it whatever it needs and see it through. That's how a college project became a 351-test application, and how a research question became a 56-team, 4-benchmark study design."
-  - "I'm working towards becoming an AI engineer with strong computer science fundamentals — which is why, from January 2027, my focus is DSA, RAG and agents, and rebuilding my own code without AI."
-  - "Outside engineering, I write. I've completed a semi-autobiographical novella, *From Innocence to Ashes*."
+  intro: "I'm Aarif. I'm working towards becoming an AI engineer with strong computer science fundamentals."
+  facts:
+    - label: "Degree"
+      value: "B.Tech in AI & Data Science, University of Kashmir"
+    - label: "Batch"
+      value: *years
+    - label: "Sem 1 SGPA"
+      value: "8.65/10"
+    - label: "Based in"
+      value: *location
+  blocks:
+    - heading: "What I work on"
+      items:
+        - text: "Research on open-weight LLM agent teams."
+          href: "#research"
+        - text: "Tested, database-backed web apps in Python and Flask."
+          href: "#projects"
+    - heading: "How I work"
+      items:
+        - text: "Pin model versions and freeze question sets so runs can be repeated."
+        - text: "Keep a decision log and a run log for research."
+        - text: "Write tests and run CI on every push (CampusHub)."
+    - heading: "Outside code"
+      items:
+        - text: "VERITAS Language Club: founder. Paused, resuming March 2027."
+          href: "#leadership"
+        - text: "Completed a novella, *From Innocence to Ashes*."
 
 contact:
   heading: "Open to AI/ML and software engineering internships."
