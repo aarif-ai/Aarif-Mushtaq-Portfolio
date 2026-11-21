@@ -487,7 +487,206 @@ main:focus {
   }
 }
 
-/* ---------- 10. Motion (only when the visitor allows it) ---------- */
+/* ---------- 10. Sections ---------- */
+.section {
+  padding-block: var(--space-8);
+}
+
+.section-title {
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 48rem) {
+  .section {
+    padding-block: var(--space-12);
+  }
+}
+
+/* ---------- 11. Stats strip ---------- */
+.stats {
+  border-block: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.stats-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-3);
+  margin: 0 auto;
+  padding-block: var(--space-6);
+  list-style: none;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: var(--step-3);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; /* equal-width digits: no jitter */
+}
+
+.stat-number {
+  display: inline-block;
+  text-align: right;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 48rem) {
+  .stats-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- 12. Cards, pills, tags ---------- */
+.card {
+  position: relative;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+@media (min-width: 48rem) {
+  .card {
+    padding: var(--space-4);
+  }
+}
+
+.card-title {
+  margin-bottom: var(--space-1);
+}
+
+.card-meta {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* Status pill: the words carry the meaning; colour only reinforces it */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: var(--space-2);
+  padding: 0.2rem 0.65rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  line-height: 1.4;
+}
+
+.status-pill::before {
+  content: "";
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-ongoing { color: var(--accent); }
+.status-complete { color: var(--accent-2); }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+/* ---------- 13. Research ---------- */
+.research-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 60rem) {
+  .research-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.field {
+  margin-top: var(--space-3);
+}
+
+.field-label {
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field p {
+  margin-bottom: 0;
+}
+
+.field-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.field-list li + li {
+  margin-top: 0.4rem;
+}
+
+.card-figure {
+  margin: var(--space-3) 0 0;
+}
+
+.card-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) 0 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.card-links a {
+  font-weight: 600;
+}
+
+.link-note {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* ---------- 14. Motion (only when the visitor allows it) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .hero-canvas {
     transition: opacity 600ms var(--ease-out);

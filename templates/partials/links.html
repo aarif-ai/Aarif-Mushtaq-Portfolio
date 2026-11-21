@@ -1,0 +1,24 @@
+{#
+  A list of links from the YAML (`links` must be set by the includer).
+  - Empty href  → plain text, never a link
+    (e.g. "Code available on request (private repository)").
+  - A .pdf link → opens in a new tab (rel="noopener" keeps the new tab
+    from controlling this one).
+#}
+{% if links %}
+<ul class="card-links">
+  {% for link in links %}
+  <li>
+    {% if link.href %}
+      {% if link.href.endswith(".pdf") %}
+    <a href="{{ link.href }}" target="_blank" rel="noopener">{{ link.label }}</a>
+      {% else %}
+    <a href="{{ link.href }}">{{ link.label }}</a>
+      {% endif %}
+    {% else %}
+    <span class="link-note">{{ link.label }}</span>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

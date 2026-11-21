@@ -85,6 +85,63 @@ def load_content() -> dict[str, Any]:
     return content
 
 
+def image_size(path: Path) -> tuple[int, int]:
+    """Read the pixel width and height of a .webp or .svg file.
+
+    The sizes go into width/height attributes so the browser reserves the
+    right space before the image loads (no layout shift).
+    WebP: the size sits in the file header, in one of three formats
+    (VP8 lossy, VP8L lossless, VP8X extended).
+    SVG: the size comes from the viewBox="0 0 width height" attribute.
+    """
+    if path.suffix == ".svg":
+        text = path.read_text(encoding="utf-8")
+        match = re.search(r'viewBox="\s*[\d.-]+[\s,]+[\d.-]+[\s,]+([\d.]+)[\s,]+([\d.]+)', text)
+        if not match:
+            raise SystemExit(f"Build failed: {path.name} has no viewBox")
+        return round(float(match.group(1))), round(float(match.group(2)))
+
+    if path.suffix == ".webp":
+        header = path.read_bytes()[:30]
+        chunk = header[12:16]
+        if chunk == b"VP8 ":
+            width = int.from_bytes(header[26:28], "little") & 0x3FFF
+            height = int.from_bytes(header[28:30], "little") & 0x3FFF
+            return width, height
+        if chunk == b"VP8L":
+            bits = int.from_bytes(header[21:25], "little")
+            return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+        if chunk == b"VP8X":
+            width = int.from_bytes(header[24:27], "little") + 1
+            height = int.from_bytes(header[27:30], "little") + 1
+            return width, height
+
+    raise SystemExit(f"Build failed: can't read the size of {path.name} "
+                     "(only .webp and .svg are supported)")
+
+
+def add_file_flags(data: Any) -> None:
+    """Mark every YAML entry that points at a file with whether it exists.
+
+    Any dictionary with a `file` key (diagrams, figures) gets:
+      exists: True/False  - is the file in static/ right now?
+      width, height       - its size, only when it exists
+    Templates render the image only `if item.exists`, so a diagram or figure
+    that hasn't been made yet simply doesn't appear (no broken image).
+    """
+    if isinstance(data, list):
+        for value in data:
+            add_file_flags(value)
+    elif isinstance(data, dict):
+        if isinstance(data.get("file"), str):
+            path = STATIC_DIR / data["file"].lstrip("/")
+            data["exists"] = path.is_file()
+            if data["exists"]:
+                data["width"], data["height"] = image_size(path)
+        for value in data.values():
+            add_file_flags(value)
+
+
 def italic(text: str) -> Markup:
     """Template filter: turn *text* into <em>text</em>. Nothing else.
 
@@ -274,6 +331,7 @@ def main() -> int:
     print("Building portfolio...")
     try:
         content = load_content()
+        add_file_flags(content)
         prepare_dist()
         pages = render_pages(make_environment(), content)
     except yaml.YAMLError as error:

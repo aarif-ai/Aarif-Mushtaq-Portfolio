@@ -1,0 +1,15 @@
+{#
+  Stats strip. The HTML always holds the final number (351, 56, 4, 100+);
+  stats-count.js only animates it, so with no JS or reduced motion the
+  real numbers are simply shown.
+#}
+<div class="stats">
+  <ul class="container stats-list">
+    {% for stat in site.stats %}
+    <li class="stat">
+      <span class="stat-value"><span class="stat-number" data-count="{{ stat.value }}">{{ stat.value }}</span>{{ stat.suffix }}</span>
+      <span class="stat-label">{{ stat.label }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

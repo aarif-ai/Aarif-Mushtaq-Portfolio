@@ -1,0 +1,58 @@
+{#
+  Research section: one card per item in content/research.yaml.
+  Fields are shown in a fixed order, each only if the item has it.
+  Never shown: slug, status_kind (only picks the pill colour), todo, and
+  diagram.boxes (notes for drawing the diagram in Step 8).
+#}
+{% set heading = (site.nav | selectattr("id", "equalto", "research") | first).label %}
+{% set list_fields = ["setup", "findings"] %}
+{% set field_order = ["question", "setup", "method", "built", "findings", "contribution", "next", "limits"] %}
+
+<section id="research" class="section" aria-labelledby="research-title">
+  <div class="container">
+    <h2 id="research-title" class="section-title">{{ heading }}</h2>
+
+    <div class="research-grid">
+      {% for item in research["items"] %}
+      <article class="card research-card" aria-labelledby="research-{{ item.slug }}">
+        <p class="status-pill status-{{ item.status_kind }}">{{ item.status }}</p>
+        <h3 id="research-{{ item.slug }}" class="card-title">{{ item.title }}</h3>
+        <p class="card-meta">{{ item.meta }}</p>
+
+        <ul class="tags">
+          {% for tag in item.tags %}
+          <li>{{ tag }}</li>
+          {% endfor %}
+        </ul>
+
+        {% for field in field_order if item[field] is defined %}
+        <div class="field">
+          <h4 class="field-label">{{ research.labels[field] }}</h4>
+          {% if field in list_fields %}
+          <ul class="field-list">
+            {% for line in item[field] %}
+            <li>{{ line }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>{{ item[field] }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        {# Diagram / figure: only when build.py found the file in static/. #}
+        {% for visual in [item.diagram, item.figure] if visual is defined and visual.exists %}
+        <figure class="card-figure">
+          <img src="{{ visual.file }}" alt="{{ visual.alt }}"
+               width="{{ visual.width }}" height="{{ visual.height }}"
+               loading="lazy" decoding="async">
+        </figure>
+        {% endfor %}
+
+        {% set links = item.links %}
+        {% include "partials/links.html" %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
