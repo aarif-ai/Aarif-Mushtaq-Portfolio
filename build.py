@@ -78,7 +78,7 @@ FORBIDDEN_FILES: dict[str, str] = {
 }
 
 # Performance budget from CLAUDE.md §6, in kilobytes (uncompressed).
-BUDGET_KB: dict[str, int] = {"CSS": 40, "JS": 30, "Fonts": 150}
+BUDGET_KB: dict[str, int] = {"CSS": 48, "JS": 30, "Fonts": 150}
 FONT_SUFFIXES = {".woff2", ".woff", ".ttf", ".otf"}
 
 

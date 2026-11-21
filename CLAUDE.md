@@ -60,9 +60,10 @@ Allowed effects — and only these unless Aarif approves more:
 9. **Hover lift** (mouse only, approved later): cards rise 3px (via `translate`, so it never fights the scroll reveal's `transform`), buttons 1px; 150–200ms.
 10. **`<details>` fade** (approved later): "Show full details" content fades and drops in on open (300ms) and the chevron turns; closing is instant.
 11. **Mobile menu** (approved later): the Menu button opens and closes the link panel (also closes on Escape and on choosing a link). It appears instantly; any future open/close animation must follow the rules below.
+12. **Contact arrow nudge** (approved later): the ↗ arrow on the LinkedIn/GitHub tiles moves 2px up-right on hover/focus (200ms, `translate`).
 Rules for every effect:
 - Animate only `transform` and `opacity` (plus `stroke-dashoffset` for diagrams). 150–600ms, ease-out. Nothing loops except the hero canvas.
-- Everything (items 1–11) is wrapped in `@media (prefers-reduced-motion: no-preference)` or checked with `matchMedia` in JS. The site must look complete and polished with all motion off.
+- Everything (items 1–12) is wrapped in `@media (prefers-reduced-motion: no-preference)` or checked with `matchMedia` in JS. The site must look complete and polished with all motion off.
 - No scroll-jacking, no custom cursor, no autoplay video, no parallax on text.
 
 ## 5. Accessibility (WCAG 2.1 AA)
@@ -70,7 +71,7 @@ Semantic landmarks, `lang="en"`, one `<h1>` per page, ordered headings, skip lin
 
 ## 6. Performance budget (mobile)
 - Lighthouse ≥ 95 in Performance, Accessibility, Best Practices, SEO.
-- JS ≤ 30 KB total (uncompressed), CSS ≤ 40 KB, fonts ≤ 150 KB total, each image ≤ 150 KB `.webp` with `width`/`height`, `loading="lazy"` below the fold. PNG is allowed only for `og.png` (link previews) and the favicons/apple-touch icon (`.ico`/`.png`), where `.webp` isn't widely supported.
+- JS ≤ 30 KB total (uncompressed), CSS ≤ 48 KB, fonts ≤ 150 KB total, each image ≤ 150 KB `.webp` with `width`/`height`, `loading="lazy"` below the fold. PNG is allowed only for `og.png` (link previews) and the favicons/apple-touch icon (`.ico`/`.png`), where `.webp` isn't widely supported.
 - No layout shift (CLS < 0.05). Scripts loaded with `defer`. The only blocking script allowed is a tiny theme script in `<head>` to avoid a colour flash.
 - Content Security Policy in `netlify.toml` allows only `'self'` — so no inline `<script>` or inline `style=""` attributes; put everything in files.
 

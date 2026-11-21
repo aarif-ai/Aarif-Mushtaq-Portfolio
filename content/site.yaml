@@ -45,6 +45,7 @@ ui:
   copy: "Copy"
   copied: "Copied"
   copy_email: "Copy email address"
+  email_me: "Email me"
   copyright: "© 2026"
 
 # Header section links. A link appears only once its section exists on the page.
